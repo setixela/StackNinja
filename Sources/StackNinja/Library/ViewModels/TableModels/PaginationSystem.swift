@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ReactiveWorks
 
 public struct Pagination {
    public let offset: Int
@@ -13,6 +14,8 @@ public struct Pagination {
 }
 
 public final class PaginationSystem {
+   
+   private lazy var retainer = Retainer()
    
    public  var isReady: Bool { !isFinished && !isPaginationInProgress }
    
@@ -51,5 +54,33 @@ public final class PaginationSystem {
    public func reInit() {
       isFinished = false
       currentOffset = startOffset
+   }
+}
+
+public extension PaginationSystem {
+   func paginationForWork<T>(_ loadWork: In<Pagination>.Out<[T]>?) -> Out<[T]> {
+      let work = Out<[T]> { [weak self] work in
+         guard let self, self.isReady else { work.fail(); return }
+         
+         let pagination = self.getCurrentPage()
+         
+         loadWork?
+            .doAsync(pagination)
+            .onSuccess {
+               if $0.isEmpty {
+                  self.finished()
+               } else {
+                  self.pageLoaded()
+               }
+               
+               work.success($0)
+            }
+            .onFail {
+               self.pageLoadError()
+               
+               work.fail()
+            }
+      }
+      return work.retainBy(retainer)
    }
 }
