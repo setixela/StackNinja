@@ -28,7 +28,7 @@ public struct TableItemsEvents: ScrollEventsProtocol {
    // TODO: - Обьединять ивенты как Стейты
    public var didScroll: CGFloat?
    public var willEndDragging: CGFloat?
-   public var pagination: Bool?
+   public var requestPagination: Void?
 
    // refresh
    public var refresh: Void?
@@ -48,13 +48,23 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
 
    private var items: [Any] = [] {
       didSet {
+         print("xela: TABLE SET\n")
+         isRequestedPagination = false
          cache = [:]
       }
    }
 
-   private var itemSections: [TableItemsSection] = []
+   private var itemSections: [TableItemsSection] = [] {
+      didSet {
+         print("xela: TABLE SET\n")
+         isRequestedPagination = false
+         cache = [:]
+      }
+   }
 
    private var prevScrollOffset: CGFloat = 0
+   
+   private var isRequestedPagination = false
 
    private lazy var refreshControl = UIRefreshControl()
 
@@ -173,9 +183,14 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       prevScrollOffset = scrollView.contentOffset.y
       send(\.didScroll, velocity)
 
+      guard isRequestedPagination == false else { return }
+      
       let pos = scrollView.contentOffset.y
-      if pos > view.contentSize.height - 50 - scrollView.frame.size.height {
-         send(\.pagination, true)
+      if pos > view.contentSize.height - scrollView.frame.size.height * 2 {
+         print("XELA: TABLE REQUEST PAGING")
+         
+         send(\.requestPagination)
+         isRequestedPagination = true
       }
    }
 
