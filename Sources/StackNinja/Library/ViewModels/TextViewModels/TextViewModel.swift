@@ -12,6 +12,7 @@ open class TextViewModel: BaseViewModel<TextViewExtended> {
    public var events: EventsStore = .init()
 
    override open func start() {
+      scrollEnabled(false)
       view.on(\.didEditingChanged, self) {
          $0.send(\.didEditingChanged, $1)
       }

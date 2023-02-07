@@ -54,4 +54,9 @@ public extension ViewSetterProtocol where View: TextViewExtended {
       view.autocorrectionType = .no
       return self
    }
+   
+   @discardableResult func scrollEnabled(_ value: Bool) -> Self {
+      view.isScrollEnabled = value
+      return self
+   }
 }

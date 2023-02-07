@@ -61,7 +61,7 @@ public extension ViewSetterProtocol {
    }
    
    @discardableResult func minWidth(_ value: CGFloat) -> Self {
-      view.addAnchors.minHeight(value)
+      view.addAnchors.minWidth(value)
       return self
    }
    

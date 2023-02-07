@@ -17,7 +17,7 @@ public final class PaginationSystem {
    
    private lazy var retainer = Retainer()
    
-   public  var isReady: Bool { !isFinished && !isPaginationInProgress }
+   public var isReady: Bool { !isFinished && !isPaginationInProgress }
    
    private var isPaginationInProgress = false
    private var isFinished = false
