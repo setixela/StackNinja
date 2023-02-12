@@ -28,7 +28,14 @@ public extension AlamoLoader {
    }
 }
 
-public final class PaddingImageView: UIImageView, Marginable, AlamoLoader, Tappable, LoadableView {
+public final class PaddingImageView: UIImageView,
+                                     Marginable,
+                                     AlamoLoader,
+                                     Tappable,
+                                     LoadableView,
+                                     ViewModelStorageView {
+   public var viewModel: UIViewModel?
+   
    public var padding: UIEdgeInsets = .init()
    
    public  var events: EventsStore = .init()

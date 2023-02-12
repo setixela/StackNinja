@@ -11,11 +11,11 @@ import UIKit
 public enum SwitcherState {
    case turnOn
    case turnOff
+   case turned(Bool)
 }
 
-public final class Switcher: BaseViewModel<UISwitch>, Eventable, Stateable2 {
+public final class Switcher: BaseViewModel<UISwitch>, Eventable, Stateable {
    public typealias State = ViewState
-   public typealias State2 = SwitcherState
 
    public typealias Events = SwitchEvent
    public var events: EventsStore = .init()
@@ -35,13 +35,15 @@ public final class Switcher: BaseViewModel<UISwitch>, Eventable, Stateable2 {
    }
 }
 
-public extension Switcher {
-   func applyState(_ state: SwitcherState) {
+extension Switcher: StateMachine {
+   public func setState(_ state: SwitcherState) {
       switch state {
       case .turnOn:
          view.setOn(true, animated: true)
       case .turnOff:
          view.setOn(false, animated: true)
+      case .turned(let value):
+         view.setOn(value, animated: true)
       }
    }
 }

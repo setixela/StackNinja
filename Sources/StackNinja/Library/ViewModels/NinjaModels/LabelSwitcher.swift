@@ -23,11 +23,13 @@ open class LabelSwitcherX: StackNinja<SComboMR<LabelModel, WrappedY<Switcher>>> 
 }
 
 public extension LabelSwitcherX {
-   static func switcherWith(text: String) -> Self {
+   static func switcherWith(text: String, isTurned: Bool = false) -> Self {
       Self()
-         .setAll { label, _ in
+         .setAll { label, switcher in
             label
                .text(text)
+            switcher.subModel
+               .setState(.turned(isTurned))
          }
    }
 }
