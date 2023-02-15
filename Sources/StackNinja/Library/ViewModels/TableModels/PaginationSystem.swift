@@ -60,7 +60,7 @@ public final class PaginationSystem {
 public extension PaginationSystem {
    func paginationForWork<T>(_ loadWork: In<Pagination>.Out<[T]>?) -> Out<[T]> {
       let work = Out<[T]> { [weak self] work in
-         guard let self, self.isReady else { work.fail(); return }
+         guard let self, self.isReady else { work.success([]); return }
          
          let pagination = self.getCurrentPage()
          
