@@ -9,7 +9,8 @@ import UIKit
 
 public extension ViewSetterProtocol where View: TextViewExtended {
    @discardableResult func text(_ value: String) -> Self {
-      view.text = value
+      view.text = value == "" ? nil : value
+      if value != "" { view.textColor = view.baseTextColor }
       return self
    }
    
