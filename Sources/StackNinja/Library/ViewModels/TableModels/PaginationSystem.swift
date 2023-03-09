@@ -49,6 +49,7 @@ public final class PaginationSystem {
    
    public func finished() {
       isFinished = true
+      isPaginationInProgress = false
    }
    
    public func reInit() {
@@ -69,15 +70,14 @@ public extension PaginationSystem {
             .onSuccess {
                if $0.isEmpty {
                   self.finished()
+                  work.cancel()
                } else {
                   self.pageLoaded()
+                  work.success($0)
                }
-               
-               work.success($0)
             }
             .onFail {
                self.pageLoadError()
-               
                work.fail()
             }
       }
