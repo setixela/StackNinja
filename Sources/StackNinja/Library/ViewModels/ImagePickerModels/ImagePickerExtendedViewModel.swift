@@ -23,12 +23,14 @@ public final class ImagePickerExtendedViewModel: BaseModel, Eventable {
     
     private var _picker: PHPickerViewController?
     
+    private var limit: Int = 10
+    
     private var picker: PHPickerViewController {
         get {
             guard let _picker else {
                 var config = PHPickerConfiguration()
                 config.filter = .images
-                config.selectionLimit = 10
+                config.selectionLimit = limit
                 
                 let picker = PHPickerViewController(configuration: config)
                 picker.delegate = self
@@ -77,9 +79,9 @@ public final class ImagePickerExtendedViewModel: BaseModel, Eventable {
     }
 
     @discardableResult
-    public func allowsEditing() -> Self {
-        //    picker.allowsEditing = true
-        self
+    public func setLimit(_ value: Int) -> Self {
+        limit = value
+        return self
     }
 }
 
