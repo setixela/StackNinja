@@ -32,6 +32,10 @@ open class StackModel: BaseViewModel<StackViewExtended> {
    override open func start() {
       axis(.vertical)
    }
+    
+   public typealias X = HStackModel
+   
+   public typealias Y = VStackModel
 }
 
 extension StackModel: Stateable2 {

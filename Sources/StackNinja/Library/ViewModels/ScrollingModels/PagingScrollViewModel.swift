@@ -54,7 +54,9 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       let currentPage = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
       pageControl.currentPage = currentPage
-
+      guard currentPage < models.count else { 
+         return
+      }
       send(\.didViewModelPresented, models[currentPage])
    }
 }
@@ -68,7 +70,15 @@ extension PagingScrollViewModel: StateMachine {
    public func setState(_ state: PagingScrollViewModelState) {
       switch state {
       case let .setViewModels(models):
+         self.models.forEach { $0.uiView.removeFromSuperview() }
          self.models = models
+         pageControl.currentPage = 0
+         pageControl.numberOfPages = models.count
+         
+         guard models.isEmpty == false else {
+            view.contentSize.width = 0
+            return
+         }
 
          models.enumerated().forEach {
             let subview = $1.uiView

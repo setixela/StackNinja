@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 public extension ViewSetterProtocol where View: PaddingImageView {
    @discardableResult func image(_ value: UIImage, color: UIColor? = nil) -> Self {
@@ -98,6 +99,35 @@ public extension ViewSetterProtocol where View: PaddingImageView {
             closure?(slf, nil)
          }
       }
+      
+      return self
+   }
+    
+   @discardableResult func indirectUrl(
+      _ value: String?,
+      placeHolder: UIImage? = nil,
+      closure: ((Self?, UIImage?) -> Void)? = nil
+   ) -> Self {
+      view.layer.masksToBounds = true
+      
+      guard let url = URL(string: value ?? "") else {
+         view.image = placeHolder ?? view.image
+         return self
+      }
+      
+      view.image = placeHolder
+      
+      AF
+         .request(url)
+         .responseImage { [weak self] response in
+            switch response.result {
+            case let .success(image):
+               self?.view.image = image
+               closure?(self, image)
+            case .failure:
+               closure?(self, nil)
+            }
+         }
       
       return self
    }
