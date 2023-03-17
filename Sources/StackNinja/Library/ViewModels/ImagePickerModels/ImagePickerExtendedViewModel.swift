@@ -9,103 +9,148 @@ import PhotosUI
 import ReactiveWorks
 
 public struct ImagePickerExtendedEvents: InitProtocol {
-    public init() {}
-    
-    public var presentOn: UIViewController??
-    public var didCancel: Void?
-    public var didImagePicked: UIImage?
-    public var didImagePickingError: Void?
+   public init() {}
+
+   public var presentOn: UIViewController??
+   public var didCancel: Void?
+   public var didImagePicked: UIImage?
+   public var didImagePickingError: Void?
 }
 
 public final class ImagePickerExtendedViewModel: BaseModel, Eventable {
-    public typealias Events = ImagePickerEvents
-    public var events = EventsStore()
-    
-    private var _picker: PHPickerViewController?
-    
-    private var limit: Int = 10
-    
-    private var picker: PHPickerViewController {
-        get {
-            guard let _picker else {
-                var config = PHPickerConfiguration()
-                config.filter = .images
-                config.selectionLimit = limit
-                
-                let picker = PHPickerViewController(configuration: config)
-                picker.delegate = self
-                _picker = picker
-                return picker
+   public typealias Events = ImagePickerEvents
+   public var events = EventsStore()
+
+   private var _picker: PHPickerViewController?
+
+   private var limit: Int = 10
+
+   private var picker: PHPickerViewController {
+      guard let _picker else {
+         var config = PHPickerConfiguration()
+         config.filter = .images
+         config.selectionLimit = limit
+
+         let picker = PHPickerViewController(configuration: config)
+         picker.delegate = self
+         _picker = picker
+         return picker
+      }
+
+      return _picker
+   }
+
+   private var _legacyPicker: UIImagePickerController?
+
+   private var legacyPicker: UIImagePickerController {
+      guard let _legacyPicker else {
+         let picker = UIImagePickerController()
+         picker.delegate = self
+         picker.sourceType = .camera
+         _legacyPicker = picker
+
+         return picker
+      }
+
+      return _legacyPicker
+   }
+
+   override public func start() {
+      on(\.presentOn) { [weak self] (vc: UIViewController?) in
+         guard let picker = self?.picker else { return }
+
+         let photoLibraryAction = UIAlertAction(title: "Выбрать  фото", style: .default) {
+            _ in
+            vc?.present(picker, animated: true)
+         }
+
+         let cameraAction = UIAlertAction(title: "Сделать снимок", style: .default) {
+            [weak self] _ in
+            guard let picker = self?.legacyPicker else { return }
+
+            vc?.present(picker, animated: true)
+         }
+
+         let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
+
+         let dialogMessage = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+
+         dialogMessage.addAction(photoLibraryAction)
+         dialogMessage.addAction(cameraAction)
+         dialogMessage.addAction(cancelAction)
+
+         if let rootVC = UIApplication.shared.windows.first?.rootViewController {
+            var topVC = rootVC
+            while let presentedVC = topVC.presentedViewController {
+               topVC = presentedVC
             }
-            
-            return _picker
-        }
-    }
+            topVC.present(dialogMessage, animated: true, completion: nil)
+         }
 
-    override public func start() {
-        on(\.presentOn) { [weak self] vc in
-            guard let picker = self?.picker else { return }
+         vc?.view.endEditing(true)
+      }
+   }
 
-            let photoLibraryAction = UIAlertAction(title: "Выбрать  фото", style: .default) {
-                _ in
-                //   picker.sourceType = .photoLibrary
-                vc?.present(picker, animated: true)
-            }
-
-            let cameraAction = UIAlertAction(title: "Сделать снимок", style: .default) {
-                _ in
-                //  picker.sourceType = .camera
-                vc?.present(picker, animated: true)
-            }
-
-            let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
-
-            let dialogMessage = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-            dialogMessage.addAction(photoLibraryAction)
-            dialogMessage.addAction(cameraAction)
-            dialogMessage.addAction(cancelAction)
-
-            if let rootVC = UIApplication.shared.windows.first?.rootViewController {
-                var topVC = rootVC
-                while let presentedVC = topVC.presentedViewController {
-                    topVC = presentedVC
-                }
-                topVC.present(dialogMessage, animated: true, completion: nil)
-            }
-
-            vc?.view.endEditing(true)
-        }
-    }
-
-    @discardableResult
-    public func setLimit(_ value: Int) -> Self {
-        limit = value
-        return self
-    }
+   @discardableResult
+   public func setLimit(_ value: Int) -> Self {
+      limit = value
+      return self
+   }
 }
 
 extension ImagePickerExtendedViewModel: PHPickerViewControllerDelegate {
-    public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+   public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+      picker.dismiss(animated: true)
 
-        picker.dismiss(animated: true)
-
-        results
-            .compactMap { $0.itemProvider }
-            .forEach {
-                $0.loadObject(
-                    ofClass: UIImage.self) { [weak self] reading, error in
-                        if let image = reading as? UIImage {
-                            self?.send(\.didImagePicked, image)
-                        }
-                    }
+      results
+         .compactMap { $0.itemProvider }
+         .forEach {
+            $0.loadObject(
+               ofClass: UIImage.self)
+            { [weak self] reading, _ in
+               if let image = reading as? UIImage {
+                  self?.send(\.didImagePicked, image)
+               }
             }
+         }
 
-        clearPicker()
-    }
-    
-    
-    private func clearPicker() {
-        _picker = nil
-    }
+      clearPicker()
+   }
+
+   @discardableResult
+   public func allowsEditing() -> Self {
+      legacyPicker.allowsEditing = true
+      return self
+   }
+
+   private func clearPicker() {
+      _picker = nil
+      _legacyPicker = nil
+   }
+}
+
+extension ImagePickerExtendedViewModel: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+   public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+      picker.dismiss(animated: true)
+      send(\.didCancel)
+   }
+
+   public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+      picker.dismiss(animated: true)
+
+      guard let image = info[.originalImage] as? UIImage else {
+         send(\.didImagePickingError)
+         return
+      }
+
+      send(\.didImagePicked, image)
+
+      if picker.allowsEditing == true {
+         guard let croppedImage = info[.editedImage] as? UIImage else {
+            send(\.didImagePickingError)
+            return
+         }
+         send(\.didImageCropped, croppedImage)
+      }
+   }
 }

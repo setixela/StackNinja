@@ -18,7 +18,12 @@ public extension ViewSetterProtocol {
       view.layer.cornerRadius = value
       return self
    }
-   
+
+   @discardableResult func cornerCurve(_ value: CALayerCornerCurve) -> Self {
+      view.layer.cornerCurve = value
+      return self
+   }
+
    @discardableResult func borderWidth(_ value: CGFloat) -> Self {
       view.layer.borderWidth = value
       return self

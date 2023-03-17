@@ -20,7 +20,7 @@ public final class StackViewExtended: UIStackView, Eventable, ViewModelStorageVi
    public var viewModel: UIViewModel?
    
    public var activityModel: UIViewModel?
-   
+
    override init(frame: CGRect) {
       super.init(frame: frame)
       
@@ -50,6 +50,8 @@ public final class StackViewExtended: UIStackView, Eventable, ViewModelStorageVi
    
    public override func layoutSubviews() {
       super.layoutSubviews()
+
+      send(\.didLayout)
       
       guard let backView = backView else {
          return
