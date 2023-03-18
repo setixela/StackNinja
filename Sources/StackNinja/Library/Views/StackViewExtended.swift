@@ -20,7 +20,7 @@ public final class StackViewExtended: UIStackView, Eventable, ViewModelStorageVi
    public var viewModel: UIViewModel?
    
    public var activityModel: UIViewModel?
-
+   
    override init(frame: CGRect) {
       super.init(frame: frame)
       

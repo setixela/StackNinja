@@ -9,7 +9,7 @@ import ReactiveWorks
 
 public typealias InitAnyObject = AnyObject & InitProtocol
 
-public protocol WorksProtocol: AnyObject {
+public protocol WorksProtocol: AnyObject, InitProtocol {
    var retainer: Retainer { get }
 }
 
