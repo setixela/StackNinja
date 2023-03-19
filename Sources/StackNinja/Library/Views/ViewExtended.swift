@@ -45,7 +45,15 @@ public final class PaddingView: UIView, Marginable {
 
 // MARK: - ViewExtended
 
-public final class ViewExtended: UIView, Tappable, LoadableView {
+public final class ViewExtended: UIView, Tappable, LoadableView, ViewModelStorageView {
+   public var viewModel: UIViewModel?
+
    public var events: EventsStore = .init()
    public var activityModel: UIViewModel?
+
+   override public func layoutSubviews() {
+      super.layoutSubviews()
+
+     send(\.didLayout)
+   }
 }

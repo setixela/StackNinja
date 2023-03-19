@@ -8,18 +8,31 @@
 import ReactiveWorks
 import UIKit
 
-public struct ViewEvents: InitProtocol {
+public protocol ViewEventsProtocol: InitProtocol {
+   var willMoveToSuperview: Void?  { get set }
+   var didMoveToSuperview: Void? { get set }
+   var willDisappear: Void? { get set }
+   var didLayout: Void? { get set }
+}
+
+public struct ViewEvents: ViewEventsProtocol {
    public init() {}
 
    public var willMoveToSuperview: Void?
    public var didMoveToSuperview: Void?
    public var willDisappear: Void?
-   public var didTap: Void?
    public var didLayout: Void?
+
+   public var didTap: Void?
 }
 
-public struct ButtonEvents: InitProtocol {
+public struct ButtonEvents: ViewEventsProtocol {
    public init() {}
+
+   public var willMoveToSuperview: Void?
+   public var didMoveToSuperview: Void?
+   public var willDisappear: Void?
+   public var didLayout: Void?
 
    public var didTap: Void?
    public var didSelect: String?
