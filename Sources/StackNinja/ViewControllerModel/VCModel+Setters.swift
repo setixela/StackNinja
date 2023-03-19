@@ -86,4 +86,9 @@ public extension VCModelProtocol {
       navigationController?.navigationBar.setNeedsLayout()
       return self
    }
+
+   @discardableResult func navBarHidden(_ value: Bool) -> Self {
+      navigationController?.navigationBar.isHidden = value
+      return self
+   }
 }

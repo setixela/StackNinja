@@ -164,8 +164,8 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
 
       let text = itemSections[section].title
       let view = LabelModel()
-         .set(headerState)
          .padding(.init(top: 4, left: 16, bottom: 4, right: 16))
+         .set(headerState)
          .text(text)
          .backColor(headerBackColor)
          .uiView
