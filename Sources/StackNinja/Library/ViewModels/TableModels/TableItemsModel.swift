@@ -22,6 +22,7 @@ public struct TableItemsEvents: ScrollEventsProtocol {
 
    public var didSelectRow: (IndexPath, Int)?
    public var didSelectItemAtIndex: Int?
+   public var willDisplayCellAtIndexPath: (UITableViewCell, IndexPath)?
 
    public var presentedIndex: Int?
 
@@ -208,6 +209,10 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       send(\.refresh)
       refreshControl.endRefreshing()
       view.isScrollEnabled = true
+   }
+
+   public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+      send(\.willDisplayCellAtIndexPath, (cell, indexPath))
    }
 }
 

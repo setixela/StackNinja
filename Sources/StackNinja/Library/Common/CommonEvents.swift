@@ -24,20 +24,11 @@ public struct ViewEvents: ViewEventsProtocol {
    public var didLayout: Void?
 
    public var didTap: Void?
-}
-
-public struct ButtonEvents: ViewEventsProtocol {
-   public init() {}
-
-   public var willMoveToSuperview: Void?
-   public var didMoveToSuperview: Void?
-   public var willDisappear: Void?
-   public var didLayout: Void?
-
-   public var didTap: Void?
    public var didSelect: String?
    public var didSelectRangeIndex: Int?
 }
+
+public typealias ButtonEvents = ViewEvents
 
 public protocol ScrollEventsProtocol: InitProtocol {
    // TODO: - Обьединять ивенты как Стейты
