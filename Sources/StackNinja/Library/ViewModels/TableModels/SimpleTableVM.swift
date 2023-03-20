@@ -13,7 +13,10 @@ public struct TableSection {
    public let models: [UIViewModel]
 }
 
-public struct TableViewEvents: InitProtocol {
+public struct TableViewEvents: InitProtocol, ScrollEventsProtocol {
+   public var didScroll: CGFloat?
+   public var willEndDragging: CGFloat?
+
    public init() {}
 
    public var cellForRow: ((UIViewModel) -> Void)?
@@ -21,7 +24,7 @@ public struct TableViewEvents: InitProtocol {
    public var reloadData: Void?
 }
 
-public final class SimpleTableVM: BaseViewModel<TableViewExtended> {
+public final class SimpleTableVM: BaseViewModel<TableViewExtended>, UIScrollViewDelegate {
    public typealias Events = TableViewEvents
 
    public var events = EventsStore()
@@ -32,11 +35,27 @@ public final class SimpleTableVM: BaseViewModel<TableViewExtended> {
    private var sections: [TableSection] = []
    private var isMultiSection: Bool = false
 
+   private var prevScrollOffset: CGFloat = 0
+
    override public func start() {
       view.delegate = self
       view.dataSource = self
       view.register(UITableViewCell.self, forCellReuseIdentifier: cellName)
    }
+
+   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+      let velocity = scrollView.contentOffset.y - prevScrollOffset
+      prevScrollOffset = scrollView.contentOffset.y
+      send(\.didScroll, velocity)
+   }
+
+   public func scrollViewWillEndDragging(_: UIScrollView,
+                                         withVelocity velocity: CGPoint,
+                                         targetContentOffset _: UnsafeMutablePointer<CGPoint>)
+   {
+      send(\.willEndDragging, velocity.y)
+   }
+
 }
 
 extension SimpleTableVM: Stateable {

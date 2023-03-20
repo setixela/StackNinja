@@ -23,6 +23,7 @@ public struct TableItemsEvents: ScrollEventsProtocol {
    public var didSelectRow: (IndexPath, Int)?
    public var didSelectItemAtIndex: Int?
    public var willDisplayCellAtIndexPath: (UITableViewCell, IndexPath)?
+   public var didEndDisplayCellAtIndexPath: (UITableViewCell, IndexPath)?
 
    public var presentedIndex: Int?
 
@@ -30,6 +31,7 @@ public struct TableItemsEvents: ScrollEventsProtocol {
    public var didScroll: CGFloat?
    public var willEndDragging: CGFloat?
    public var requestPagination: Void?
+   public var didLayout: Void?
 
    // refresh
    public var refresh: Void?
@@ -92,6 +94,9 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       view.layer.masksToBounds = true
       view.rowHeight = UITableView.automaticDimension
       view.estimatedRowHeight = UITableView.automaticDimension
+      view.on(\.didLayout, self) {
+         $0.send(\.didLayout)
+      }
 
       if #available(iOS 15.0, *) {
          view.sectionHeaderTopPadding = 0
@@ -213,6 +218,10 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
 
    public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
       send(\.willDisplayCellAtIndexPath, (cell, indexPath))
+   }
+
+   public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+      send(\.didEndDisplayCellAtIndexPath, (cell, indexPath))
    }
 }
 

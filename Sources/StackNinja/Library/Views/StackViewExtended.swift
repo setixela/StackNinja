@@ -8,7 +8,7 @@
 import UIKit
 import ReactiveWorks
 
-public final class StackViewExtended: UIStackView, Eventable, ViewModelStorageView, LoadableView {
+public final class StackViewExtended: UIStackView, Eventable, ViewModelStorageView, LoadableView, Squircle {
    public typealias Events = ViewEvents
    
    private var isGestured = false

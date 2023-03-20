@@ -1,22 +1,26 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Aleksandr Solovyev on 03.02.2023.
 //
 
+import ReactiveWorks
 import UIKit
 
-public final class TableViewExtended: UITableView {
+public final class TableViewExtended: UITableView, Eventable {
+   public typealias Events = ViewEvents
+   public var events: EventsStore = .init()
+
    public var isNeedsLayoutWhenContentChanged: Bool = false
-   
-   public override var contentSize: CGSize {
+
+   override public var contentSize: CGSize {
       didSet {
          if isNeedsLayoutWhenContentChanged { invalidateIntrinsicContentSize() }
       }
    }
-   
-   public override var intrinsicContentSize: CGSize {
+
+   override public var intrinsicContentSize: CGSize {
       if isNeedsLayoutWhenContentChanged {
          layoutIfNeeded()
          return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height)
@@ -24,5 +28,10 @@ public final class TableViewExtended: UITableView {
          return super.intrinsicContentSize
       }
    }
-}
 
+   override public func layoutSubviews() {
+      super.layoutSubviews()
+
+      send(\.didLayout)
+   }
+}

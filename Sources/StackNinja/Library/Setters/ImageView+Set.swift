@@ -106,6 +106,7 @@ public extension ViewSetterProtocol where View: PaddingImageView {
    @discardableResult func indirectUrl(
       _ value: String?,
       placeHolder: UIImage? = nil,
+      transition: UIImageView.ImageTransition = .noTransition,
       closure: ((Self?, UIImage?) -> Void)? = nil
    ) -> Self {
       view.layer.masksToBounds = true
@@ -122,7 +123,7 @@ public extension ViewSetterProtocol where View: PaddingImageView {
          .responseImage { [weak self] response in
             switch response.result {
             case let .success(image):
-               self?.view.image = image
+               self?.view.af.run(transition, with: image)
                closure?(self, image)
             case .failure:
                closure?(self, nil)

@@ -45,7 +45,7 @@ public final class PaddingView: UIView, Marginable {
 
 // MARK: - ViewExtended
 
-public final class ViewExtended: UIView, Tappable, LoadableView, ViewModelStorageView {
+public final class ViewExtended: UIView, Tappable, LoadableView, ViewModelStorageView, Squircle {
    public var viewModel: UIViewModel?
 
    public var events: EventsStore = .init()
