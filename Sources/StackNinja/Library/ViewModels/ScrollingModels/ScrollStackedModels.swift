@@ -35,6 +35,7 @@ open class BaseScrollStacked: BaseViewModel<ScrollViewExtended>, Eventable, Stat
 
       view.insetsLayoutMarginsFromSafeArea = true
       stack.view.insetsLayoutMarginsFromSafeArea = true
+      view.delaysContentTouches = false
    }
 }
 
@@ -66,11 +67,11 @@ open class ScrollStackedModelY: BaseScrollStacked, UIScrollViewDelegate {
       send(\.didScroll, velocity)
    }
 
-   public func scrollViewWillEndDragging(_ scrollView: UIScrollView,
-                                  withVelocity velocity: CGPoint,
-                                  targetContentOffset: UnsafeMutablePointer<CGPoint>)
+   public func scrollViewWillEndDragging(_: UIScrollView,
+                                         withVelocity velocity: CGPoint,
+                                         targetContentOffset offset: UnsafeMutablePointer<CGPoint>)
    {
-      send(\.willEndDragging, velocity.y)
+      send(\.willEndDragging, (velocity: velocity.y, offset: offset.pointee.y))
    }
 
    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -108,13 +109,13 @@ open class ScrollStackedModelX: BaseScrollStacked, UIScrollViewDelegate {
       send(\.didScroll, velocity)
    }
 
-   public  func scrollViewWillEndDragging(_ scrollView: UIScrollView,
-                                  withVelocity velocity: CGPoint,
-                                  targetContentOffset: UnsafeMutablePointer<CGPoint>)
+   public func scrollViewWillEndDragging(_: UIScrollView,
+                                         withVelocity velocity: CGPoint,
+                                         targetContentOffset offset: UnsafeMutablePointer<CGPoint>)
    {
-      send(\.willEndDragging, velocity.x)
+      send(\.willEndDragging, (velocity: velocity.y, offset: offset.pointee.y))
    }
-
+   
    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
       send(\.willBeginDragging)
    }

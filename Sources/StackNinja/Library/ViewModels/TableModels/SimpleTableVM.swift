@@ -15,7 +15,7 @@ public struct TableSection {
 
 public struct TableViewEvents: InitProtocol, ScrollEventsProtocol {
    public var didScroll: CGFloat?
-   public var willEndDragging: CGFloat?
+   public var willEndDragging: (velocity: CGFloat, offset: CGFloat)?
 
    public init() {}
 
@@ -51,11 +51,10 @@ public final class SimpleTableVM: BaseViewModel<TableViewExtended>, UIScrollView
 
    public func scrollViewWillEndDragging(_: UIScrollView,
                                          withVelocity velocity: CGPoint,
-                                         targetContentOffset _: UnsafeMutablePointer<CGPoint>)
+                                         targetContentOffset offset: UnsafeMutablePointer<CGPoint>)
    {
-      send(\.willEndDragging, velocity.y)
+      send(\.willEndDragging, (velocity: velocity.y, offset: offset.pointee.y))
    }
-
 }
 
 extension SimpleTableVM: Stateable {
@@ -81,7 +80,8 @@ extension SimpleTableVM: UITableViewDataSource {
    }
 
    public func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
-      isMultiSection ? sections[section].models.count : models.count
+      let count = isMultiSection ? sections[section].models.count : models.count
+      return count
    }
 
    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -93,6 +93,16 @@ extension SimpleTableVM: UITableViewDataSource {
          cell.contentView.subviews.forEach { $0.removeFromSuperview() }
          cell.contentView.addSubview(modelView)
          modelView.addAnchors.fitToView(cell.contentView)
+
+         if indexPath.row == (view.numberOfRows(inSection: indexPath.section) - 1) { cell.separatorInset = .init(
+               top: 0.0,
+               left: cell.bounds.size.width,
+               bottom: 0.0,
+               right: 0
+            )
+         } else {
+            cell.separatorInset = .zero
+         }
 
          return cell
       } else {

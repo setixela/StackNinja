@@ -29,7 +29,7 @@ public struct TableItemsEvents: ScrollEventsProtocol {
 
    // TODO: - Обьединять ивенты как Стейты
    public var didScroll: CGFloat?
-   public var willEndDragging: CGFloat?
+   public var willEndDragging: (velocity: CGFloat, offset: CGFloat)?
    public var requestPagination: Void?
    public var didLayout: Void?
 
@@ -202,9 +202,9 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
 
    public func scrollViewWillEndDragging(_: UIScrollView,
                                          withVelocity velocity: CGPoint,
-                                         targetContentOffset _: UnsafeMutablePointer<CGPoint>)
+                                         targetContentOffset offset: UnsafeMutablePointer<CGPoint>)
    {
-      send(\.willEndDragging, velocity.y)
+      send(\.willEndDragging, (velocity: velocity.y, offset: offset.pointee.y))
    }
 
    // Refresh

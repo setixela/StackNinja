@@ -23,7 +23,8 @@ public final class TableViewExtended: UITableView, Eventable {
    override public var intrinsicContentSize: CGSize {
       if isNeedsLayoutWhenContentChanged {
          layoutIfNeeded()
-         return CGSize(width: UIView.noIntrinsicMetric, height: contentSize.height)
+         let height = contentSize.height
+         return CGSize(width: UIView.noIntrinsicMetric, height: height)
       } else {
          return super.intrinsicContentSize
       }

@@ -16,6 +16,7 @@ public enum ButtonState {
    case font(UIFont)
    case backColor(UIColor)
    case cornerRadius(CGFloat)
+   case cornerCurve(CALayerCornerCurve)
    case height(CGFloat)
    case width(CGFloat)
    case image(UIImage)
@@ -41,6 +42,8 @@ public extension ViewModelProtocol where Self: Stateable, View: ButtonExtended {
          backColor(value)
       case .cornerRadius(let value):
          cornerRadius(value)
+      case .cornerCurve(let value):
+         cornerCurve(value)
       case .height(let value):
          height(value)
       case .width(let value):

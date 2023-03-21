@@ -51,4 +51,20 @@ public final class ScrollViewExtended: UIScrollView, LoadableView, Eventable {
          next?.touchesEnded(touches, with: event)
       }
    }
+
+   public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+      super.touchesMoved(touches, with: event)
+
+      if isNeedPassThroughTuches {
+         next?.touchesMoved(touches, with: event)
+      }
+   }
+
+   public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+      super.touchesCancelled(touches, with: event)
+
+      if isNeedPassThroughTuches {
+         next?.touchesCancelled(touches, with: event)
+      }
+   }
 }
