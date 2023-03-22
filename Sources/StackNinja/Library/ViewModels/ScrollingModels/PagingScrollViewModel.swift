@@ -49,8 +49,6 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
          self.prefFrame = self.view.frame
          self.send(\.didViewModelPresented, self.models[self.pageControl.currentPage])
       }
-
-       view.layoutIfNeeded()
    }
 
    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -91,7 +89,6 @@ extension PagingScrollViewModel: StateMachine {
             view.addSubview(subview)
          }
 
-          view.setNeedsLayout()
          send(\.didViewModelPresented, models[pageControl.currentPage])
 
       case let .addViewModel(model):
@@ -109,7 +106,6 @@ extension PagingScrollViewModel: StateMachine {
          if models.count == 1 {
             send(\.didViewModelPresented, models[pageControl.currentPage])
          }
-          view.setNeedsLayout()
       }
    }
 }
