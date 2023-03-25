@@ -35,7 +35,6 @@ open class BaseScrollStacked: BaseViewModel<ScrollViewExtended>, Eventable, Stat
 
       view.insetsLayoutMarginsFromSafeArea = true
       stack.view.insetsLayoutMarginsFromSafeArea = true
-      view.delaysContentTouches = false
    }
 }
 
@@ -64,7 +63,7 @@ open class ScrollStackedModelY: BaseScrollStacked, UIScrollViewDelegate {
       let velocity = scrollView.contentOffset.y - prevScrollOffset
       scrollView.contentOffset.x = 0
       prevScrollOffset = scrollView.contentOffset.y
-      send(\.didScroll, velocity)
+      send(\.didScroll, (velocity, prevScrollOffset))
    }
 
    public func scrollViewWillEndDragging(_: UIScrollView,
@@ -106,7 +105,7 @@ open class ScrollStackedModelX: BaseScrollStacked, UIScrollViewDelegate {
       let velocity = scrollView.contentOffset.x - prevScrollOffset
       scrollView.contentOffset.y = 0
       prevScrollOffset = scrollView.contentOffset.x
-      send(\.didScroll, velocity)
+      send(\.didScroll, (velocity, prevScrollOffset))
    }
 
    public func scrollViewWillEndDragging(_: UIScrollView,

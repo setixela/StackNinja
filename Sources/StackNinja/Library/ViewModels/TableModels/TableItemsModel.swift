@@ -28,7 +28,7 @@ public struct TableItemsEvents: ScrollEventsProtocol {
    public var presentedIndex: Int?
 
    // TODO: - Обьединять ивенты как Стейты
-   public var didScroll: CGFloat?
+   public var didScroll: (velocity: CGFloat, offset: CGFloat)?
    public var willEndDragging: (velocity: CGFloat, offset: CGFloat)?
    public var requestPagination: Void?
    public var didLayout: Void?
@@ -187,7 +187,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
       let velocity = scrollView.contentOffset.y - prevScrollOffset
       prevScrollOffset = scrollView.contentOffset.y
-      send(\.didScroll, velocity)
+      send(\.didScroll, (velocity, prevScrollOffset))
 
       guard isRequestedPagination == false else { return }
       

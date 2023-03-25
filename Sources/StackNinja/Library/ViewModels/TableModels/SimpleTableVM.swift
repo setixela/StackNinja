@@ -14,7 +14,7 @@ public struct TableSection {
 }
 
 public struct TableViewEvents: InitProtocol, ScrollEventsProtocol {
-   public var didScroll: CGFloat?
+   public var didScroll: (velocity: CGFloat, offset: CGFloat)?
    public var willEndDragging: (velocity: CGFloat, offset: CGFloat)?
 
    public init() {}
@@ -46,7 +46,7 @@ public final class SimpleTableVM: BaseViewModel<TableViewExtended>, UIScrollView
    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
       let velocity = scrollView.contentOffset.y - prevScrollOffset
       prevScrollOffset = scrollView.contentOffset.y
-      send(\.didScroll, velocity)
+    send(\.didScroll, (velocity, scrollView.contentOffset.y))
    }
 
    public func scrollViewWillEndDragging(_: UIScrollView,
