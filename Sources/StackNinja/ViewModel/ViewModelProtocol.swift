@@ -71,8 +71,10 @@ extension ViewModelProtocol {
 }
 
 public extension BaseViewModel where View: ViewModelStorageView {
-   func setNeedsStoreModelInView() {
+   @discardableResult
+   func setNeedsStoreModelInView() -> Self {
       view.viewModel = self
+      return self
    }
 }
 

@@ -22,7 +22,8 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
    public var events = EventsStore()
    public var currentPage: Int { pageControl.currentPage }
 
-   private lazy var pageControl = UIPageControl()
+   public private(set) lazy var pageControlModel = PageControlModel()
+   private var pageControl: UIPageControl { pageControlModel.view }
 
    private lazy var prefFrame = view.frame
 
@@ -34,8 +35,8 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
       view.on(\.didLayout) { [weak self] in
          guard
             let self,
-            self.models.isEmpty == false
-//            self.prefFrame != self.view.frame
+            self.models.isEmpty == false,
+            self.prefFrame != self.view.frame
          else { return }
 
          self.models.enumerated().forEach {
@@ -110,3 +111,6 @@ extension PagingScrollViewModel: StateMachine {
    }
 }
 
+public final class PageControlModel: BaseViewModel<UIPageControl> {
+
+}

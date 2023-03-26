@@ -113,6 +113,12 @@ open class BaseSceneModel<
       finishWork?.fail()
    }
 
+   @discardableResult
+   public func title(_ value: String) -> Self {
+      vcModel?.title = value
+      return self
+   }
+
    deinit {
       finishWork = nil
       print("DEINIT SceneModel")
@@ -123,6 +129,7 @@ open class BaseSceneModel<
       vcModel = model
       return model
    }
+   
 
    override public func makeMainView() -> UIView {
       let view = mainVM.uiView
