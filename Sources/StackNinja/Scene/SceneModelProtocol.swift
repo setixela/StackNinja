@@ -5,8 +5,8 @@
 //  Created by Aleksandr Solovyev on 28.05.2022.
 //
 
-import UIKit
 import ReactiveWorks
+import UIKit
 
 public protocol SceneModelProtocol: ModelProtocol {
    func makeVC() -> UIViewController
@@ -33,11 +33,11 @@ open class BaseScene<In, Out>: NSObject, SceneInputProtocol, SceneModelProtocol,
       fatalError()
    }
 
-   open func setInput(_ value: Any?) {
+   open func setInput(_: Any?) {
       fatalError()
    }
 
-   open func dismiss(animated: Bool) {
+   open func dismiss(animated _: Bool) {
       fatalError()
    }
 
@@ -129,13 +129,14 @@ open class BaseSceneModel<
       vcModel = model
       return model
    }
-   
 
    override public func makeMainView() -> UIView {
       let view = mainVM.uiView
       if let inputValue {
-         vcModel?.on(\.updateInputAfterLoad, self) {
-            $0.send(\.input, inputValue)
+         vcModel?.on(\.updateInputAfterLoad, self) { _ in
+            DispatchQueue.main.async {
+               self.send(\.input, inputValue)
+            }
          }
       }
       return view

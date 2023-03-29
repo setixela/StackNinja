@@ -23,13 +23,13 @@ public enum ScrollState {
 open class BaseScrollStacked: BaseViewModel<ScrollViewExtended>, Eventable, Stateable2 {
    public var events = EventsStore()
 
-   public  typealias Events = ScrollEvents
+   public typealias Events = ScrollEvents
    public typealias State = ViewState
    public typealias State2 = ScrollState
 
    public lazy var stack = StackModel()
 
-   public override func start() {
+   override public func start() {
       view.addSubview(stack.uiView)
       stack.distribution(.equalSpacing)
 
@@ -43,7 +43,7 @@ open class BaseScrollStacked: BaseViewModel<ScrollViewExtended>, Eventable, Stat
 open class ScrollStackedModelY: BaseScrollStacked, UIScrollViewDelegate {
    private var prevScrollOffset: CGFloat = 0
 
-   open override func start() {
+   override open func start() {
       super.start()
 
       view.delegate = self
@@ -73,11 +73,11 @@ open class ScrollStackedModelY: BaseScrollStacked, UIScrollViewDelegate {
       send(\.willEndDragging, (velocity: velocity.y, offset: offset.pointee.y))
    }
 
-   public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+   public func scrollViewWillBeginDragging(_: UIScrollView) {
       send(\.willBeginDragging)
    }
 
-   public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+   public func scrollViewWillBeginDecelerating(_: UIScrollView) {
       send(\.willBeginDecelerating)
    }
 }
@@ -85,7 +85,7 @@ open class ScrollStackedModelY: BaseScrollStacked, UIScrollViewDelegate {
 open class ScrollStackedModelX: BaseScrollStacked, UIScrollViewDelegate {
    private var prevScrollOffset: CGFloat = 0
 
-   open override func start() {
+   override open func start() {
       super.start()
       view.delegate = self
 
@@ -114,12 +114,12 @@ open class ScrollStackedModelX: BaseScrollStacked, UIScrollViewDelegate {
    {
       send(\.willEndDragging, (velocity: velocity.y, offset: offset.pointee.y))
    }
-   
-   public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+
+   public func scrollViewWillBeginDragging(_: UIScrollView) {
       send(\.willBeginDragging)
    }
 
-   public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+   public func scrollViewWillBeginDecelerating(_: UIScrollView) {
       send(\.willBeginDecelerating)
    }
 }
@@ -201,28 +201,37 @@ public extension BaseScrollStacked {
       view.bounces = value
       return self
    }
+
+   @discardableResult
+   func killScroll(animated: Bool = false) -> Self {
+      view.isScrollEnabled = false
+      let offset = view.contentOffset
+      view.setContentOffset(offset, animated: animated)
+      view.isScrollEnabled = true
+      return self
+   }
 }
 
-extension BaseScrollStacked {
-   public func applyState(_ state: State2) {
+public extension BaseScrollStacked {
+   func applyState(_ state: State2) {
       switch state {
-      case .arrangedModels(let array):
+      case let .arrangedModels(array):
          arrangedModels(array)
-      case .addArrangedModels(let array):
+      case let .addArrangedModels(array):
          addArrangedModels(array)
-      case .spacing(let value):
+      case let .spacing(value):
          spacing(value)
-      case .scrollToTopAnimated(let value):
+      case let .scrollToTopAnimated(value):
          scrollToBegin(value)
       case .hideHorizontalScrollIndicator:
          hideHorizontalScrollIndicator()
       case .hideVerticalScrollIndicator:
          hideVerticalScrollIndicator()
-      case .padding(let value):
+      case let .padding(value):
          padding(value)
-      case .contentInset(let value):
+      case let .contentInset(value):
          contentInset(value)
-      case .bounce(let value):
+      case let .bounce(value):
          bounce(value)
       }
    }

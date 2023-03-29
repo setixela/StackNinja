@@ -232,10 +232,10 @@ extension TableItemsModel: Stateable {
 extension TableItemsModel: Eventable {}
 
 public extension TableItemsModel {
-   @discardableResult func headerParams(labelLabelState: [LabelState],
+   @discardableResult func headerParams(labelState: [LabelState],
                                         backColor: UIColor) -> Self
    {
-      headerState = labelLabelState
+      headerState = labelState
       headerBackColor = backColor
       return self
    }
