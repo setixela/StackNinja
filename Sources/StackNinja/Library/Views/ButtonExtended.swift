@@ -30,6 +30,8 @@ public final class ButtonExtended: UIButton, AlamoLoader, Tappable, LoadableView
       if isVertical {
          setButtonVertical()
       }
+
+      send(\.didLayout)
    }
 
    @available(*, unavailable)
