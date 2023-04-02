@@ -65,6 +65,12 @@ public final class PaddingImageView: UIImageView,
             bottom: -padding.bottom,
             right: -padding.right)
    }
+
+   override public func layoutSubviews() {
+      super.layoutSubviews()
+
+      send(\.didLayout)
+   }
 }
 
 extension PaddingImageView: Eventable {

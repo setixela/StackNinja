@@ -305,6 +305,11 @@ public extension TableItemsModel {
       view.isNeedsLayoutWhenContentChanged = true
       return self
    }
+
+   @discardableResult  func setAutoReload() -> Self {
+      view.setAutoReload()
+      return self
+   }
 }
 
 public final class TableCell: UITableViewCell {

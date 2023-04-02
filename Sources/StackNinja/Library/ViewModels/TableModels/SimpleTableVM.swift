@@ -144,4 +144,14 @@ public extension SimpleTableVM {
       view.isNeedsLayoutWhenContentChanged = true
       return self
    }
+
+   @discardableResult func reloadData() -> Self {
+      view.reloadData()
+      return self
+   }
+
+   @discardableResult  func setAutoReload() -> Self {
+      view.setAutoReload()
+      return self
+   }
 }

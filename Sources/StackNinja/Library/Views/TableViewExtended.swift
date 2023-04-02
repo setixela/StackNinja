@@ -14,6 +14,8 @@ public final class TableViewExtended: UITableView, Eventable {
 
    public var isNeedsLayoutWhenContentChanged: Bool = false
 
+   private var isAutoReload = false
+
    override public var contentSize: CGSize {
       didSet {
          if isNeedsLayoutWhenContentChanged { invalidateIntrinsicContentSize() }
@@ -34,5 +36,24 @@ public final class TableViewExtended: UITableView, Eventable {
       super.layoutSubviews()
 
       send(\.didLayout)
+   }
+
+   func setAutoReload() {
+      isAutoReload = true
+      let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapTable))
+      gesture.cancelsTouchesInView = false
+      addGestureRecognizer(gesture)
+   }
+
+   override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+      super.touchesEnded(touches, with: event)
+
+      if isAutoReload {
+         reloadData()
+      }
+   }
+
+   @objc private func didTapTable() {
+      reloadData()
    }
 }
