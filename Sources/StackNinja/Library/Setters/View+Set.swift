@@ -39,14 +39,24 @@ public extension ViewSetterProtocol {
       height(value.height)
       return self
    }
-   
+
    @discardableResult func height(_ value: CGFloat) -> Self {
       view.addAnchors.constHeight(value)
       return self
    }
    
+   @discardableResult func height(_ value: CGFloat, priority: UILayoutPriority = .defaultHigh) -> Self {
+      view.addAnchors.constHeight(value).priority(priority)
+      return self
+   }
+   
    @discardableResult func width(_ value: CGFloat) -> Self {
       view.addAnchors.constWidth(value)
+      return self
+   }
+
+   @discardableResult func width(_ value: CGFloat, priority: UILayoutPriority) -> Self {
+      view.addAnchors.constWidth(value).priority(priority)
       return self
    }
    

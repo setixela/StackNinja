@@ -43,10 +43,23 @@ public struct Stack<M: VMP>: InitProtocol {
 
          public enum Right2<R2: VMP> {
             public typealias Ninja = StackNinja<SComboMRDR<M, R, D, R2>>
+
+            public typealias R3 = Right3
+            public typealias D2 = Down2
+
+            public enum Right3<R3: VMP> {
+               public typealias Ninja = StackNinja<SComboMRDRR<M, R, D, R2, R3>>
+            }
          }
 
          public enum Down2<D2: VMP> {
             public typealias Ninja = StackNinja<SComboMRDD<M, R, D, D2>>
+
+            public typealias R2 = Right2
+
+            public enum Right2<R2: VMP> {
+               public typealias Ninja = StackNinja<SComboMRDDR<M, R, D, D2, R2>>
+            }
          }
       }
 

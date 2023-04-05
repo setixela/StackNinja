@@ -185,6 +185,65 @@ public extension StackNinja {
       return self
    }
 
+   @discardableResult func setAll<M, R, D, D2, R2>(_ setAll: VariadicClosure5<M, R, D, D2, R2>) -> Self where S == SComboMRDDR<M, R, D, D2, R2>
+   {
+      setAll(models.main, models.right, models.down, models.down2, models.right2)
+      if !isConfigured {
+         configure()
+         isConfigured = true
+      }
+      return self
+   }
+
+   @discardableResult func setMain<M, R, D, D2, R2>(
+      _ setMain: GenericClosure<M>,
+      setRight: GenericClosure<R>,
+      setDown: GenericClosure<D>,
+      setDown2: GenericClosure<D2>,
+      setRight2: GenericClosure<R2>
+   ) -> Self where S == SComboMRDDR<M, R, D, D2, R2> {
+      setMain(models.main)
+      setRight(models.right)
+      setDown(models.down)
+      setDown2(models.down2)
+      setRight2(models.right2)
+      if !isConfigured {
+         configure()
+         isConfigured = true
+      }
+      return self
+   }
+
+   @discardableResult func setAll<M, R, D, R2, R3>(_ setAll: VariadicClosure5<M, R, D, R2, R3>) -> Self where S == SComboMRDRR<M, R, D, R2, R3>
+   {
+      setAll(models.main, models.right, models.down, models.right2, models.right3)
+      if !isConfigured {
+         configure()
+         isConfigured = true
+      }
+      return self
+   }
+
+   @discardableResult func setMain<M, R, D, R2, R3>(
+      _ setMain: GenericClosure<M>,
+      setRight: GenericClosure<R>,
+      setDown: GenericClosure<D>,
+      setRight2: GenericClosure<R2>,
+      setRight3: GenericClosure<R3>
+   ) -> Self where S == SComboMRDRR<M, R, D, R2, R3> {
+      setMain(models.main)
+      setRight(models.right)
+      setDown(models.down)
+      setRight2(models.right2)
+      setRight3(models.right3)
+      if !isConfigured {
+         configure()
+         isConfigured = true
+      }
+      return self
+   }
+
+
    @discardableResult func setAll<M, R, D, R2>(_ setAll: VariadicClosure4<M, R, D, R2>) -> Self where S == SComboMRDR<M, R, D, R2>
    {
       setAll(models.main, models.right, models.down, models.right2)

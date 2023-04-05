@@ -92,6 +92,36 @@ public extension StackNinja
       view.addArrangedSubview(models.right2.uiView)
    }
 
+   // M R R
+   // _ D _
+   // _ D _
+   func configure<M, R, D, D2, R2>() where S == SComboMRDDR<M, R, D, D2, R2>
+   {
+      configureRightStart()
+      view.addArrangedSubview(models.main.uiView)
+      let vert = vertical
+      vert.addArrangedSubview(models.right.uiView)
+      vert.addArrangedSubview(models.down.uiView)
+      vert.addArrangedSubview(models.down2.uiView)
+      view.addArrangedSubview(vert)
+      view.addArrangedSubview(models.right2.uiView)
+   }
+
+   // M R R R
+   // _ D _ _
+   // _ _ _ _
+   func configure<M, R, D, R2, R3>() where S == SComboMRDRR<M, R, D, R2, R3>
+   {
+      configureRightStart()
+      view.addArrangedSubview(models.main.uiView)
+      let vert = vertical
+      vert.addArrangedSubview(models.right.uiView)
+      vert.addArrangedSubview(models.down.uiView)
+      view.addArrangedSubview(vert)
+      view.addArrangedSubview(models.right2.uiView)
+      view.addArrangedSubview(models.right3.uiView)
+   }
+
    // M R _
    // _ D _
    // _ D _

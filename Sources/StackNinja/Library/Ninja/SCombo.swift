@@ -115,6 +115,25 @@ public struct SComboMRDR<M: VMP, R: VMP, D: VMP, R2: VMP>: SCP {
    public var right2: R2 = .init()
 }
 
+public struct SComboMRDRR<M: VMP, R: VMP, D: VMP, R2: VMP, R3: VMP>: SCP {
+   public init(main: M, right: R, down: D, right2: R2, right3: R3) {
+      self.main = main
+      self.right = right
+      self.down = down
+      self.right2 = right2
+      self.right3 = right3
+   }
+
+   public init() {}
+
+   public var main: M = .init()
+   public var right: R = .init()
+   public var down: D = .init()
+   public var right2: R2 = .init()
+   public var right3: R3 = .init()
+}
+
+
 public struct SComboMRDD<M: VMP, R: VMP, D: VMP, D2: VMP>: SCP {
    public init(main: M, right: R, down: D, down2: D2) {
       self.main = main
@@ -129,6 +148,24 @@ public struct SComboMRDD<M: VMP, R: VMP, D: VMP, D2: VMP>: SCP {
    public var right: R = .init()
    public var down: D = .init()
    public var down2: D2 = .init()
+}
+
+public struct SComboMRDDR<M: VMP, R: VMP, D: VMP, D2: VMP, R2: VMP>: SCP {
+   public init(main: M, right: R, down: D, down2: D2, right2: R2) {
+      self.main = main
+      self.right = right
+      self.down = down
+      self.down2 = down2
+      self.right2 = right2
+   }
+
+   public init() {}
+
+   public var main: M = .init()
+   public var right: R = .init()
+   public var down: D = .init()
+   public var down2: D2 = .init()
+   public var right2: R2 = .init()
 }
 
 // down
