@@ -16,6 +16,9 @@ public struct VCEvent: InitProtocol {
    
    public var viewWillAppearByBackButton: Void?
 
+   public var viewWillLayoutSubviews: Void?
+   public var viewDidLayoutSubviews: Void?
+
    public var dismiss: Void?
 
    public var motionEnded: UIEvent.EventSubtype?
