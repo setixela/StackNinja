@@ -95,6 +95,16 @@ public extension ViewSetterProtocol {
       view.addAnchors.constWidth(value * LayoutConfig.sizeAspectCoeficient)
       return self
    }
+
+   @discardableResult func fillingWidth() -> Self {
+      width(CGFloat(Int.max), priority: .defaultLow)
+      return self
+   }
+
+   @discardableResult func fillingHeight() -> Self {
+      height(CGFloat(Int.max), priority: .defaultLow)
+      return self
+   }
    
    @discardableResult func hidden(_ value: Bool, isAnimated: Bool = false) -> Self {
       guard isAnimated else {
