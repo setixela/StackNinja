@@ -60,6 +60,19 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
       }
       send(\.didViewModelPresented, models[currentPage])
    }
+
+   // func that scroll to image at index
+   @discardableResult
+   public func scrollToIndex(_ index: Int) -> Self {
+      guard index < models.count else { return self }
+
+      let xPosition = view.frame.width * CGFloat(index)
+      view.setContentOffset(CGPoint(x: xPosition, y: 0), animated: true)
+      pageControl.currentPage = index
+      send(\.didViewModelPresented, models[index])
+
+      return self
+   }
 }
 
 public enum PagingScrollViewModelState {

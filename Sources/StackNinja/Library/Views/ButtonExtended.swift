@@ -9,7 +9,9 @@ import AlamofireImage
 import ReactiveWorks
 import UIKit
 
-public final class ButtonExtended: UIButton, AlamoLoader, Tappable, LoadableView, Squircle {
+public final class ButtonExtended: UIButton, AlamoLoader, Tappable, LoadableView, Squircle, ViewModelStorageView {
+   public var viewModel: UIViewModel?
+
    public typealias Events = ButtonEvents
 
    public var events: EventsStore = .init()
