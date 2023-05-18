@@ -16,6 +16,7 @@ public enum StackState {
    case padding(UIEdgeInsets)
    case backColor(UIColor)
    case cornerRadius(CGFloat)
+   case cornerCurve(CALayerCornerCurve)
    case borderWidth(CGFloat)
    case borderColor(UIColor)
    case height(CGFloat)
@@ -55,6 +56,8 @@ public extension ViewModelProtocol where Self: Stateable, View: StackViewExtende
          height(value)
       case let .cornerRadius(value):
          cornerRadius(value)
+      case .cornerCurve(let value):
+         cornerCurve(value)
       case let .borderColor(value):
          borderColor(value)
       case let .borderWidth(value):

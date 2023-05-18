@@ -20,6 +20,7 @@ public enum TextFieldState {
    case height(CGFloat)
    case widht(CGFloat)
    case cornerRadius(CGFloat)
+   case cornerCurve(CALayerCornerCurve)
    case borderWidth(CGFloat)
    case borderColor(UIColor)
    case size(CGSize)
@@ -50,6 +51,8 @@ public extension ViewModelProtocol where Self: Stateable, View: PaddingTextField
          width(value)
       case let .cornerRadius(value):
          cornerRadius(value)
+      case .cornerCurve(let value):
+         cornerCurve(value)
       case let .borderColor(value):
          borderColor(value)
       case let .borderWidth(value):

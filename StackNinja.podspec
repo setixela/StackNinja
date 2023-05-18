@@ -18,7 +18,7 @@ Pod::Spec.new do |spec|
   spec.name         = "StackNinja"
   spec.version      = "1.0.0"
   spec.summary      = "Async App Constructor"
-  spec.swift_version = '14.0'
+  spec.swift_version = '5.0'
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
