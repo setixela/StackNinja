@@ -103,6 +103,7 @@ public struct Stack<M: VMP>: InitProtocol {
 
          public enum Down3<D3: VMP> {
             public typealias Ninja = StackNinja<SComboMDDD<M, D, D2, D3>>
+            public typealias D4 = Down4
             
             public enum Down4<D4: VMP> {
                public typealias Ninja = StackNinja<SComboMDDDD<M, D, D2, D3, D4>>
