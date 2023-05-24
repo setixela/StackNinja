@@ -75,7 +75,7 @@ public extension PaginationSystem {
             .onSuccess {
                if $0.isEmpty {
                   self.finished()
-                  work.cancel()
+                  work.success([])
                } else {
                   self.pageLoaded()
                   work.success($0)
@@ -109,7 +109,7 @@ public extension PaginationSystem {
             .onSuccess {
                if $0.isEmpty {
                   self.finished()
-                  work.cancel()
+                  work.success([])
                } else {
                   self.pageLoaded()
                   work.success($0)
