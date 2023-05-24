@@ -50,6 +50,13 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
    public var presenters: [String: PresenterProtocol] = [:]
 
    private var items: [Any] = [] {
+      willSet {
+         if items.count == newValue.count {
+            isPaginationDisabled = true
+         } else {
+            isPaginationDisabled = false
+         }
+      }
       didSet {
          print("xela: TABLE SET\n")
          isRequestedPagination = false
@@ -58,6 +65,13 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
    }
 
    private var itemSections: [TableItemsSection] = [] {
+      willSet {
+         if itemSections.count == newValue.count {
+            isPaginationDisabled = true
+         } else {
+            isPaginationDisabled = false
+         }
+      }
       didSet {
          print("xela: TABLE SET\n")
          isRequestedPagination = false
@@ -68,6 +82,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
    private var prevScrollOffset: CGFloat = 0
    
    private var isRequestedPagination = false
+   private var isPaginationDisabled = false
 
    private lazy var refreshControl = UIRefreshControl()
 
@@ -189,7 +204,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       prevScrollOffset = scrollView.contentOffset.y
       send(\.didScroll, (velocity, prevScrollOffset))
 
-      guard isRequestedPagination == false else { return }
+      guard isRequestedPagination == false, isPaginationDisabled == false else { return }
       
       let pos = scrollView.contentOffset.y
       if pos > view.contentSize.height - scrollView.frame.size.height * 2 {

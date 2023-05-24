@@ -75,9 +75,6 @@ public extension PaginationSystem {
             .onSuccess {
                if $0.isEmpty {
                   self.finished()
-                  if self.currentOffset == self.startOffset {
-                     work.success([])
-                  }
                   work.cancel()
                } else {
                   self.pageLoaded()
@@ -112,9 +109,6 @@ public extension PaginationSystem {
             .onSuccess {
                if $0.isEmpty {
                   self.finished()
-                  if self.currentOffset == self.startOffset {
-                     work.success([])
-                  }
                   work.cancel()
                } else {
                   self.pageLoaded()
