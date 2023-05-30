@@ -69,7 +69,6 @@ St/\ck Ninj/\ - App constructor framework
 Async Scenario example:
 -----------------------
 <pre><code>      
-import ReactiveWorks
 import StackNinja
 
 struct BenefitBasketScenarioScenarioInput: ScenarioEvents {

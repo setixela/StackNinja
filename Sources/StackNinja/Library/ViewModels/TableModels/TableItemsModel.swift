@@ -80,7 +80,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
    }
 
    private var prevScrollOffset: CGFloat = 0
-   
+
    private var isRequestedPagination = false
    private var isPaginationDisabled = false
 
@@ -205,11 +205,11 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       send(\.didScroll, (velocity, prevScrollOffset))
 
       guard isRequestedPagination == false, isPaginationDisabled == false else { return }
-      
+
       let pos = scrollView.contentOffset.y
       if pos > view.contentSize.height - scrollView.frame.size.height * 2 {
          print("XELA: TABLE REQUEST PAGING")
-         
+
          send(\.requestPagination)
          isRequestedPagination = true
       }
@@ -231,11 +231,11 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       view.isScrollEnabled = true
    }
 
-   public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+   public func tableView(_: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
       send(\.willDisplayCellAtIndexPath, (cell, indexPath))
    }
 
-   public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+   public func tableView(_: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
       send(\.didEndDisplayCellAtIndexPath, (cell, indexPath))
    }
 }
@@ -321,7 +321,7 @@ public extension TableItemsModel {
       return self
    }
 
-   @discardableResult  func setAutoReload() -> Self {
+   @discardableResult func setAutoReload() -> Self {
       view.setAutoReload()
       return self
    }
