@@ -74,4 +74,10 @@ public extension ViewSetterProtocol where View: PaddingTextField {
       view.autocorrectionType = .no
       return self
    }
+
+   @discardableResult func clearButtonTintColor(_ value: UIColor) -> Self {
+      let clearButton = view.value(forKey: "_clearButton") as? UIButton
+      clearButton?.tintColor = value
+      return self
+   }
 }

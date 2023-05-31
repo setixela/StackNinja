@@ -26,6 +26,7 @@ public enum TextFieldState {
    case size(CGSize)
    case zPosition(CGFloat)
    case placing(CGPoint)
+   case clearButtonTintColor(UIColor)
 }
 
 public extension ViewModelProtocol where Self: Stateable, View: PaddingTextField {
@@ -65,6 +66,8 @@ public extension ViewModelProtocol where Self: Stateable, View: PaddingTextField
          placing(value)
       case let .placeholderColor(value):
          placeholderColor(value)
+      case let .clearButtonTintColor(value):
+         clearButtonTintColor(value)
       }
    }
 }

@@ -125,5 +125,13 @@ extension PagingScrollViewModel: StateMachine {
 }
 
 public final class PageControlModel: BaseViewModel<UIPageControl> {
+    @discardableResult public func pageIndicatorTintColor(_ value: UIColor) -> Self {
+        view.pageIndicatorTintColor = value
+        return self
+    }
 
+    @discardableResult public func currentPageIndicatorTintColor(_ value: UIColor) -> Self {
+        view.currentPageIndicatorTintColor = value
+        return self
+    }
 }

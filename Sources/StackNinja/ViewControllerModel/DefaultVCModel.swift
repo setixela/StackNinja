@@ -55,10 +55,12 @@ public final class DefaultVCModel: BaseVCModel {
 
    override public func viewDidAppear(_ animated: Bool) {
       super.viewDidAppear(animated)
-      
-      isFirstAppear = false
 
       send(\.viewDidAppear)
+      if isFirstAppear {
+         send(\.viewDidFirstAppear)
+      }
+      isFirstAppear = false
    }
 
    override public func viewWillDisappear(_ animated: Bool) {

@@ -15,6 +15,7 @@ public struct VCEvent: InitProtocol {
    public var viewWillDissappear: Void?
    
    public var viewWillAppearByBackButton: Void?
+   public var viewDidFirstAppear: Void?
 
    public var viewWillLayoutSubviews: Void?
    public var viewDidLayoutSubviews: Void?
@@ -40,4 +41,14 @@ public protocol VCModelProtocol: UIViewController, Eventable where Events == VCE
    var isFirstAppear: Bool { get }
 
    init(sceneModel: SceneModelProtocol)
+}
+
+public extension VCModelProtocol {
+    var superview: UIView? {
+        view.superview
+    }
+
+    var rootSuperview: UIView? {
+        view.rootSuperview
+    }
 }

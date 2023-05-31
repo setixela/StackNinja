@@ -14,15 +14,25 @@ public final class PaddingTextField: UITextField, Marginable, LoadableView {
    public var isOnlyDigitsMode = false
    public var activityModel: UIViewModel?
 
-   public override func textRect(forBounds bounds: CGRect) -> CGRect {
+   override public func textRect(forBounds bounds: CGRect) -> CGRect {
       bounds.inset(by: padding)
    }
 
-   public override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+   override public func placeholderRect(forBounds bounds: CGRect) -> CGRect {
       bounds.inset(by: padding)
    }
 
-   public override func editingRect(forBounds bounds: CGRect) -> CGRect {
+   override public func editingRect(forBounds bounds: CGRect) -> CGRect {
       bounds.inset(by: padding)
+   }
+
+   public override func layoutSubviews() {
+      super.layoutSubviews()
+
+      for view in subviews {
+         if let button = view as? UIButton {
+            button.setImage(button.image(for: .normal)?.withRenderingMode(.alwaysTemplate), for: .normal)
+         }
+      }
    }
 }
