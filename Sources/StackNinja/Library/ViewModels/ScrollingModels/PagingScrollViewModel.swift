@@ -84,11 +84,13 @@ extension PagingScrollViewModel: StateMachine {
    public func setState(_ state: PagingScrollViewModelState) {
       switch state {
       case let .setViewModels(models):
+         view.rootSuperview.layoutIfNeeded()
+
          self.models.forEach { $0.uiView.removeFromSuperview() }
          self.models = models
          pageControl.currentPage = 0
          pageControl.numberOfPages = models.count
-         
+
          guard models.isEmpty == false else {
             view.contentSize.width = 0
             return

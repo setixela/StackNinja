@@ -37,6 +37,7 @@ public extension ViewSetterProtocol where View: PaddingLabel {
    
    @discardableResult func alignment(_ value: NSTextAlignment) -> Self {
       view.paragraphStyle.alignment = value
+      view.textAlignment = value
       return self
    }
    

@@ -47,6 +47,14 @@ public extension UIViewModel where Self: ViewModelProtocol {
       }
       return vuew
    }
+
+   var superview: UIView? {
+      view.superview
+   }
+
+   var rootSuperview: UIView? {
+      view.rootSuperview
+   }
 }
 
 public protocol ViewModelStorageView: UIView {
