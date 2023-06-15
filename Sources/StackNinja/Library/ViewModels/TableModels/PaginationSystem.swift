@@ -59,6 +59,7 @@ public final class PaginationSystem {
 
    public func reInit() {
       isFinished = false
+      isPaginationInProgress = false
       currentOffset = startOffset
    }
 }
