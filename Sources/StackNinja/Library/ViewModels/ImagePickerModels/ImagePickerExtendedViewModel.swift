@@ -55,23 +55,42 @@ public final class ImagePickerExtendedViewModel: BaseModel, Eventable {
       return _legacyPicker
    }
 
+   private let selectPhotoText: String
+   private let takePhotoText: String
+   private let cancelText: String
+
+   public init(selectPhotoText: String, takePhotoText: String, cancelText: String) {
+      self.selectPhotoText = selectPhotoText
+      self.takePhotoText = takePhotoText
+      self.cancelText = cancelText
+
+      super.init()
+   }
+
+   required init() {
+      fatalError("init() has not been implemented")
+   }
+   
    override public func start() {
       on(\.presentOn) { [weak self] (vc: UIViewController?) in
-         guard let picker = self?.picker else { return }
+         guard let self else { return }
+         let picker = self.picker
 
-         let photoLibraryAction = UIAlertAction(title: "Выбрать  фото", style: .default) {
+         let photoLibraryAction = UIAlertAction(title: self.selectPhotoText, style: .default) {
             _ in
             vc?.present(picker, animated: true)
          }
 
-         let cameraAction = UIAlertAction(title: "Сделать снимок", style: .default) {
+         let cameraAction = UIAlertAction(title: self.takePhotoText, style: .default) {
             [weak self] _ in
             guard let picker = self?.legacyPicker else { return }
 
             vc?.present(picker, animated: true)
          }
 
-         let cancelAction = UIAlertAction(title: "Отменить", style: .cancel, handler: nil)
+         let cancelAction = UIAlertAction(title: self.cancelText, style: .cancel) { [weak self] _ in
+            self?.send(\.didCancel)
+         }
 
          let dialogMessage = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
 
@@ -103,7 +122,7 @@ extension ImagePickerExtendedViewModel: PHPickerViewControllerDelegate {
       picker.dismiss(animated: true)
 
       results
-         .compactMap { $0.itemProvider }
+         .map(\.itemProvider)
          .forEach {
             $0.loadObject(
                ofClass: UIImage.self)
