@@ -6,6 +6,7 @@
 //
 
 import ReactiveWorks
+import Foundation
 
 public class TextCachableWork: InOut<String> {
    private var key: String?
@@ -20,7 +21,10 @@ public class TextCachableWork: InOut<String> {
 
    public func clearCache() {
       guard let key else { return }
-      cache.clearCacheForKey(key)
+
+      DispatchQueue.main.async { [weak self] in
+         self?.cache.clearCacheForKey(key)
+      }
    }
 
    public init(cache: StaticTextCacheProtocol.Type, key: String? = nil) {
