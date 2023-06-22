@@ -39,12 +39,15 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
             self.prefFrame != self.view.frame
          else { return }
 
+         let frameWidth = self.view.frame.width
+         let frameHeight = self.view.frame.height
+         self.view.contentSize.width = self.view.frame.width * CGFloat(models.count)
+
          self.models.enumerated().forEach {
             let subview = $1.uiView
-            let xPosition = self.view.frame.width * CGFloat($0)
+            let xPosition = frameWidth * CGFloat($0)
             subview.frame = CGRect(x: xPosition, y: 0,
-                                   width: self.view.frame.width, height: self.view.frame.height)
-            self.view.contentSize.width = self.view.frame.width * CGFloat($0 + 1)
+                                   width: frameWidth, height: frameHeight)
          }
 
          self.prefFrame = self.view.frame
@@ -84,8 +87,6 @@ extension PagingScrollViewModel: StateMachine {
    public func setState(_ state: PagingScrollViewModelState) {
       switch state {
       case let .setViewModels(models):
-         view.rootSuperview.layoutIfNeeded()
-
          self.models.forEach { $0.uiView.removeFromSuperview() }
          self.models = models
          pageControl.currentPage = 0
@@ -96,14 +97,19 @@ extension PagingScrollViewModel: StateMachine {
             return
          }
 
+         let frameWidth = view.frame.width
+         let frameHeight = view.frame.height
+         view.contentSize.width = self.view.frame.width * CGFloat(models.count)
+
          models.enumerated().forEach {
             let subview = $1.uiView
-            let xPosition = view.frame.width * CGFloat($0)
-            subview.frame = CGRect(x: xPosition, y: 0, width: view.frame.width, height: view.frame.height)
-            view.contentSize.width = self.view.frame.width * CGFloat($0 + 1)
+            let xPosition = frameWidth * CGFloat($0)
+            subview.frame = CGRect(x: xPosition, y: 0, width: frameWidth, height: frameHeight)
 
             view.addSubview(subview)
          }
+
+         prefFrame = view.frame
 
          send(\.didViewModelPresented, models[pageControl.currentPage])
 

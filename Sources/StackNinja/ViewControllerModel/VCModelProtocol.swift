@@ -36,6 +36,7 @@ public protocol VCModelProtocol: UIViewController, Eventable where Events == VCE
    var currentTitleColor: UIColor? { get set }
    var currentBarTranslucent: Bool? { get set }
    var currentBarBackColor: UIColor? { get set }
+   var currentBackColor: UIColor? { get set }
    var currentTitleAlpha: CGFloat? { get set }
    
    var isFirstAppear: Bool { get }

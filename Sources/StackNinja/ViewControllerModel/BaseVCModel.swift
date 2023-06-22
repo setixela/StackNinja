@@ -9,7 +9,6 @@ import UIKit
 import ReactiveWorks
 
 open class BaseVCModel: UIViewController, VCModelProtocol {
-   
    public let sceneModel: SceneModelProtocol
 
    public lazy var baseView: UIView = sceneModel.makeMainView()
@@ -23,6 +22,7 @@ open class BaseVCModel: UIViewController, VCModelProtocol {
    public var currentBarTranslucent: Bool?
    public var currentBarBackColor: UIColor?
    public var currentTitleAlpha: CGFloat?
+   public var currentBackColor: UIColor?
    
    public internal(set) var isFirstAppear = true
 
