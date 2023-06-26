@@ -15,6 +15,10 @@ public struct SpacerItem {
    }
 }
 
+extension SpacerItem: DisableSelectModifier {}
+
+// MARK: - Presenter
+
 public enum SpacerPresenter {
    public static var presenter: CellPresenterWork<SpacerItem, Spacer> {
       .init { work in

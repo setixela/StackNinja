@@ -8,6 +8,10 @@
 import ReactiveWorks
 import UIKit
 
+protocol CellModifierProtocol {}
+
+protocol DisableSelectModifier: CellModifierProtocol {}
+
 public class TableItemsSection {
    public let title: String
    public var items: [Any] = []
@@ -122,6 +126,9 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
 
    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       var itemIndex = indexPath.row
+      guard !(items[itemIndex] is (DisableSelectModifier)) else {
+         return
+      }
 
       for i in 0 ..< indexPath.section {
          itemIndex += view.numberOfRows(inSection: i)
