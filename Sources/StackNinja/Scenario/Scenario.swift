@@ -39,27 +39,18 @@ public protocol ScenarioParams {
    associatedtype ScenarioWorks: WorksProtocol
 }
 
-open class BaseParamsScenario<Params: ScenarioParams>: BaseScenario<
+open class BaseParamsScenario<Params: ScenarioParams>: BaseWorkableScenario<
    Params.ScenarioInputEvents,
    Params.ScenarioModelState,
    Params.ScenarioWorks
 > {}
 
-open class BaseScenario<Events: ScenarioEvents, State, Works>: Scenario {
-   public var works: Works
-   public var events: Events
-
+open class BaseScenarioClass<State>: Scenario {
    public private(set) lazy var start = Work<Void, Void>()
 
    public private(set) var isConfigured: Bool = false
 
-   public var setState: (State) -> Void = { _ in
-      assertionFailure("stateDelegate (setState:) did not injected into Scenario")
-   }
-
-   public required init(works: Works, stateDelegate: ((State) -> Void)?, events: Events) {
-      self.events = events
-      self.works = works
+   public init(stateDelegate: ((State) -> Void)?) {
       if let setStateFunc = stateDelegate {
          setState = setStateFunc
       }
@@ -88,5 +79,31 @@ open class BaseScenario<Events: ScenarioEvents, State, Works>: Scenario {
          assertionFailure("Scenario is Not configured. Use configure() or configureIfNeededAndStart()")
       }
       start.sendAsyncEvent()
+   }
+
+   public var setState: (State) -> Void = { _ in
+      assertionFailure("stateDelegate (setState:) did not injected into Scenario")
+   }
+}
+
+open class BaseWorkableScenario<Events: ScenarioEvents, State, Works>: BaseScenarioClass<State> {
+   public var works: Works
+   public var events: Events
+
+   public required init(works: Works, stateDelegate: ((State) -> Void)?, events: Events) {
+      self.events = events
+      self.works = works
+
+      super.init(stateDelegate: stateDelegate)
+   }
+}
+
+open class BaseScenario<State, Events: ScenarioEvents>: BaseScenarioClass<State> {
+   public var events: Events
+
+   public required init(stateDelegate: ((State) -> Void)?, events: Events) {
+      self.events = events
+
+      super.init(stateDelegate: stateDelegate)
    }
 }

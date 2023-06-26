@@ -6,5 +6,5 @@
 //
 
 public protocol ScenaribleSceneParams: SceneParams, ScenarioParams where ScenarioWorks: WorksProtocol {
-   associatedtype Scenery: BaseScenario<ScenarioInputEvents, ScenarioModelState, ScenarioWorks>
+   associatedtype Scenery: BaseWorkableScenario<ScenarioInputEvents, ScenarioModelState, ScenarioWorks>
 }
