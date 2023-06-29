@@ -41,7 +41,7 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
 
          let frameWidth = self.view.frame.width
          let frameHeight = self.view.frame.height
-         self.view.contentSize.width = self.view.frame.width * CGFloat(models.count)
+         self.view.contentSize.width = self.view.frame.width * CGFloat(self.models.count)
 
          self.models.enumerated().forEach {
             let subview = $1.uiView
