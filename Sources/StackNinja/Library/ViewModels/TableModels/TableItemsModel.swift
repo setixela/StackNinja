@@ -295,6 +295,15 @@ public extension TableItemsModel {
       return self
    }
 
+    @discardableResult func presenters(_ value: [PresenterProtocol]) -> Self {
+        presenters.removeAll()
+        value.forEach {
+            let key = $0.cellType
+            self.presenters[key] = $0
+        }
+        return self
+    }
+
    @discardableResult func updateItemAtIndex(_ value: Any,
                                              index: Int,
                                              animation _: UITableView.RowAnimation = .none) -> Self

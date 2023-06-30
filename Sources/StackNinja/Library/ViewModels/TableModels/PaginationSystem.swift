@@ -124,4 +124,48 @@ public extension PaginationSystem {
 
       return work.retainBy(retainer)
    }
+
+    func paginationForWork<T, T2, R>(
+        _ loadWork: In<PaginationWithRequest<R>>.Out<PaginationResponse<T, T2>>?,
+        withRequest request: R
+    ) -> Out<PaginationResponse<T, T2>> {
+        let work = Out<PaginationResponse<T, T2>> { [weak self] work in
+            guard let self, self.isReady else { work.success(.init(array: [], data: nil)); return }
+
+            let pagination = self.getCurrentPage()
+            let withRequest = PaginationWithRequest(
+                offset: pagination.offset,
+                limit: pagination.limit,
+                request: request
+            )
+
+            loadWork?
+                .doAsync(withRequest)
+                .onSuccess {
+                    if $0.array.isEmpty {
+                        self.finished()
+                        work.success(.init(array: [], data: $0.data))
+                    } else {
+                        self.pageLoaded()
+                        work.success(.init(array: $0.array, data: $0.data))
+                    }
+                }
+                .onFail {
+                    self.pageLoadError()
+                    work.fail()
+                }
+        }
+
+        return work.retainBy(retainer)
+    }
+}
+
+public struct PaginationResponse<T, D> {
+    public let array: [T]
+    public let data: D?
+
+    public init(array: [T], data: D?) {
+        self.array = array
+        self.data = data
+    }
 }

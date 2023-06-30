@@ -40,6 +40,12 @@ public extension ViewSetterProtocol {
       return self
    }
 
+   @discardableResult func circleWithDiameter(_ value: CGFloat) -> Self {
+      size(.init(width: value, height: value))
+      cornerRadius(value/2)
+      return self
+   }
+
    @discardableResult func height(_ value: CGFloat) -> Self {
       view.addAnchors.constHeight(value)
       return self
