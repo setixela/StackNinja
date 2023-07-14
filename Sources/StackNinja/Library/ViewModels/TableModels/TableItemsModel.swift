@@ -347,6 +347,21 @@ public extension TableItemsModel {
       view.setAutoReload()
       return self
    }
+
+   @discardableResult func reset() -> Self {
+      if isMultiSection {
+         itemSections = []
+         view.reloadData()
+      } else {
+         items = []
+         view.reloadData()
+      }
+
+      isRequestedPagination = false
+      isPaginationDisabled = false
+
+      return self
+   }
 }
 
 public final class TableCell: UITableViewCell {
