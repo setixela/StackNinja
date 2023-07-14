@@ -93,6 +93,12 @@ public extension ViewSetterProtocol where View: StackViewExtended {
       
       return self
    }
+
+   @discardableResult func insertArrangedModel(_ value: UIViewModel, at index: Int) -> Self {
+      let subview = value.uiView
+      view.insertArrangedSubview(subview, at: index)
+      return self
+   }
    
    @discardableResult func addArrangedModels(_ value: [UIViewModel]) -> Self {
       value.forEach {

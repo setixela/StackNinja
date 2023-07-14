@@ -13,6 +13,11 @@ public extension ViewSetterProtocol where View: TextViewExtended {
       if value != "" { view.textColor = view.baseTextColor }
       return self
    }
+
+    @discardableResult func attributedText(_ value: NSAttributedString) -> Self {
+        view.attributedText = value
+        return self
+    }
    
    @discardableResult func placeholder(_ value: String) -> Self {
       view.placeholder = value
