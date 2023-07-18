@@ -8,7 +8,9 @@
 import UIKit
 import ReactiveWorks
 
-public final class ScrollViewExtended: UIScrollView, LoadableView, Eventable {
+public final class ScrollViewExtended: UIScrollView, LoadableView, Eventable, ViewModelStorageView {
+   public var viewModel: UIViewModel?
+
    public typealias Events = ViewEvents
    
    public var events: EventsStore = .init()
