@@ -15,15 +15,9 @@ public final class PaddingLabel: UILabel, Marginable, Tappable {
 
    public lazy var paragraphStyle: NSMutableParagraphStyle = .init()
 
-   public override func drawText(in rect: CGRect) {
-      super.drawText(in: rect.inset(by: padding))
-   }
-
-   public override var bounds: CGRect {
-      didSet {
-         preferredMaxLayoutWidth = bounds.width - (padding.left + padding.right)
-      }
-   }
+    public override func drawText(in rect: CGRect) {
+        super.drawText(in: rect.inset(by: padding))
+    }
 
    override public var intrinsicContentSize: CGSize {
       guard let text, let font else { return super.intrinsicContentSize }
