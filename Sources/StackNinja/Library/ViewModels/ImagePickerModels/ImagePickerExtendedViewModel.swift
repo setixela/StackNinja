@@ -70,7 +70,7 @@ public final class ImagePickerExtendedViewModel: BaseModel, Eventable {
    required init() {
       fatalError("init() has not been implemented")
    }
-   
+
    override public func start() {
       on(\.presentOn) { [weak self] (vc: UIViewController?) in
          guard let self else { return }
@@ -120,6 +120,9 @@ public final class ImagePickerExtendedViewModel: BaseModel, Eventable {
 extension ImagePickerExtendedViewModel: PHPickerViewControllerDelegate {
    public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
       picker.dismiss(animated: true)
+      if results.isEmpty {
+         send(\.didCancel)
+      }
 
       results
          .map(\.itemProvider)
@@ -149,11 +152,6 @@ extension ImagePickerExtendedViewModel: PHPickerViewControllerDelegate {
 }
 
 extension ImagePickerExtendedViewModel: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-   public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-      picker.dismiss(animated: true)
-      send(\.didCancel)
-   }
-
    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
       picker.dismiss(animated: true)
 
