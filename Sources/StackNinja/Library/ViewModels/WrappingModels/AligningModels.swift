@@ -28,6 +28,14 @@ public extension ViewModelProtocol {
    func wrapped() -> WrappedX<Self> {
       WrappedX(self)
    }
+
+   func toped() -> Toped<Self> {
+      Toped(self)
+   }
+
+   func bottomed() -> Bottomed<Self> {
+      Bottomed(self)
+   }
 }
 
 // Центрирует в .fill стеках
@@ -93,3 +101,36 @@ public final class Righted<VM: VMP>: BaseViewModel<StackViewExtended>, Stateable
       ]))
    }
 }
+
+// обжимает модель с двух сторон, для увода вверх в .fill стеках\
+public final class Toped<VM: VMP>: BaseViewModel<StackViewExtended>, Stateable, VMWrapper {
+   public typealias State = StackState
+
+   public lazy var subModel = VM()
+
+   override public func start() {
+      set(.axis(.vertical))
+      set(.distribution(.fill))
+      set(.arrangedModels([
+         subModel,
+         Spacer(),
+      ]))
+   }
+}
+
+// обжимает модель с двух сторон, для увода вниз в .fill стеках
+public final class Bottomed<VM: VMP>: BaseViewModel<StackViewExtended>, Stateable, VMWrapper {
+   public typealias State = StackState
+
+   public lazy var subModel = VM()
+
+   override public func start() {
+      set(.axis(.vertical))
+      set(.distribution(.fill))
+      set(.arrangedModels([
+         Spacer(),
+         subModel,
+      ]))
+   }
+}
+
