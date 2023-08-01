@@ -12,6 +12,7 @@ public struct PagingScrollViewModelEvents: InitProtocol {
    public init() {}
 
    public var didViewModelPresented: UIViewModel?
+   public var didPop: Bool?
 }
 
 public final class PagingScrollViewModel: ScrollViewModel, Eventable {
@@ -31,6 +32,7 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
       pagingEnabled(true)
       safeAreaOffsetDisabled()
       view.delegate = self
+     // view.canCancelContentTouches = false
 
       view.on(\.didLayout) { [weak self] in
          guard
@@ -51,16 +53,20 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
          }
 
          self.prefFrame = self.view.frame
-         self.send(\.didViewModelPresented, self.models[self.pageControl.currentPage])
+      //   self.send(\.didViewModelPresented, self.models[self.pageControl.currentPage])
       }
    }
 
    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
       let currentPage = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
-      pageControl.currentPage = currentPage
+
       guard currentPage < models.count else { 
          return
       }
+      if currentPage == models.count - 2 || currentPage < pageControl.currentPage {
+         send(\.didPop, currentPage == 0)
+      }
+      pageControl.currentPage = currentPage
       send(\.didViewModelPresented, models[currentPage])
    }
 
@@ -70,10 +76,32 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
       guard index < models.count else { return self }
 
       let xPosition = view.frame.width * CGFloat(index)
-      view.setContentOffset(CGPoint(x: xPosition, y: 0), animated: true)
-      pageControl.currentPage = index
-      send(\.didViewModelPresented, models[index])
+      UIView.animate(withDuration: 0.3) {
+         self.view.setContentOffset(CGPoint(x: xPosition, y: 0), animated: false)
+      } completion: { _ in
+         self.scrollViewDidEndDecelerating(self.view)
+      }
 
+      pageControl.currentPage = index
+
+      return self
+   }
+
+   @discardableResult
+   public func scrollToEnd() -> Self {
+      guard models.count > 1 else { return self }
+      
+      scrollToIndex(models.count - 1)
+
+      return self
+   }
+
+   @discardableResult
+   public func pop() -> Self {
+      guard models.count > 1 else { return self }
+
+      scrollToIndex(currentPage - 1)
+   
       return self
    }
 }
@@ -81,6 +109,8 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
 public enum PagingScrollViewModelState {
    case setViewModels([UIViewModel])
    case addViewModel(viewModel: UIViewModel)
+   case deleteLast
+   case deleteAll
 }
 
 extension PagingScrollViewModel: StateMachine {
@@ -128,6 +158,20 @@ extension PagingScrollViewModel: StateMachine {
          if models.count == 1 {
             send(\.didViewModelPresented, models[pageControl.currentPage])
          }
+
+      case .deleteLast:
+         models.last?.uiView.removeFromSuperview()
+         models.removeLast()
+         view.contentSize.width = self.view.frame.width * CGFloat(models.count)
+         pageControl.numberOfPages = models.count
+         //setState(.setViewModels(models))
+      case .deleteAll:
+         models.forEach { $0.uiView.removeFromSuperview() }
+         models.removeAll()
+         view.contentSize.width = 0
+         pageControl.numberOfPages = 0
+         pageControl.currentPage = 0
+         view.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
       }
    }
 }

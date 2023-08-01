@@ -26,6 +26,7 @@ public struct TableItemsEvents: ScrollEventsProtocol {
 
    public var didSelectRow: (IndexPath, Int)?
    public var didSelectItemAtIndex: Int?
+   public var didSelectItem: Any?
    public var willDisplayCellAtIndexPath: (UITableViewCell, IndexPath)?
    public var didEndDisplayCellAtIndexPath: (UITableViewCell, IndexPath)?
 
@@ -130,10 +131,12 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
          guard !(items[itemIndex] is (DisableSelectModifier)) else {
             return
          }
+          send(\.didSelectItem, items[itemIndex])
       } else {
          guard !(itemSections[indexPath.section].items[indexPath.row] is (DisableSelectModifier)) else {
             return
          }
+         send(\.didSelectItem, items[itemIndex])
       }
 
       for i in 0 ..< indexPath.section {
