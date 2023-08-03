@@ -136,7 +136,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
          guard !(itemSections[indexPath.section].items[indexPath.row] is (DisableSelectModifier)) else {
             return
          }
-         send(\.didSelectItem, items[itemIndex])
+         send(\.didSelectItem, itemSections[indexPath.section].items[indexPath.row])
       }
 
       for i in 0 ..< indexPath.section {
