@@ -264,4 +264,31 @@ public extension ViewSetterProtocol {
       }
       return self
    }
+
+   @discardableResult
+   func gradient(_ value: Gradient, size: CGSize) -> Self {
+      let view: UIView = view
+      let gradientLayer = CAGradientLayer()
+      gradientLayer.cornerRadius = view.layer.cornerRadius
+      gradientLayer.masksToBounds = true
+      gradientLayer.frame = .init(x: 0, y: 0, width: size.width, height: size.height)
+      gradientLayer.colors = value.colors.map(\.cgColor)
+      gradientLayer.startPoint = value.startPoint
+      gradientLayer.endPoint = value.endPoint
+      view.layer.insertSublayer(gradientLayer, at: 0)
+
+      return self
+   }
+}
+
+public struct Gradient {
+   public let colors: [UIColor]
+   public let startPoint: CGPoint
+   public let endPoint: CGPoint
+
+   public init(colors: [UIColor], startPoint: CGPoint, endPoint: CGPoint) {
+      self.colors = colors
+      self.startPoint = startPoint
+      self.endPoint = endPoint
+   }
 }
