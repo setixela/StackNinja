@@ -43,4 +43,9 @@ public extension UIEdgeInsets {
    static func horizontalOffset(_ offset: CGFloat) -> UIEdgeInsets {
       .init(top: 0, left: offset, bottom: 0, right: offset)
    }
+
+   static func shift(_ shift: CGPoint) -> UIEdgeInsets {
+      .init(top: -shift.y, left: shift.x, bottom: shift.y, right: -shift.x)
+   }
+
 }

@@ -279,6 +279,12 @@ public extension ViewSetterProtocol {
 
       return self
    }
+
+   @discardableResult
+   func rotate(_ degrees: CGFloat) -> Self {
+      view.transform = CGAffineTransform(rotationAngle: degrees * .pi / 180)
+      return self
+   }
 }
 
 public struct Gradient {
