@@ -29,6 +29,11 @@ public final class ImagePickerExtendedViewModel: BaseModel, Eventable {
       guard let _picker else {
          var config = PHPickerConfiguration()
          config.filter = .images
+         if #available(iOS 15.0, *) {
+            config.selection = .ordered
+         } else {
+            // Fallback on earlier versions
+         }
          config.selectionLimit = limit
 
          let picker = PHPickerViewController(configuration: config)
