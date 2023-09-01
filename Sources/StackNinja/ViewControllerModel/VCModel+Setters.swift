@@ -91,4 +91,9 @@ public extension VCModelProtocol {
       navigationController?.navigationBar.isHidden = value
       return self
    }
+
+   @discardableResult func backColor(_ value: UIColor) -> Self {
+      view.backgroundColor = value
+      return self
+   }
 }
