@@ -25,8 +25,12 @@ public extension ViewModelProtocol {
       Righted(self)
    }
 
-   func wrapped() -> WrappedX<Self> {
+   func wrappedX() -> WrappedX<Self> {
       WrappedX(self)
+   }
+
+   func wrappedY() -> WrappedY<Self> {
+      WrappedY(self)
    }
 
    func toped() -> Toped<Self> {
