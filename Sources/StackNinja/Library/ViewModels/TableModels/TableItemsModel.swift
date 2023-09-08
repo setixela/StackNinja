@@ -65,7 +65,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       didSet {
          print("xela: TABLE SET\n")
          isRequestedPagination = false
-         cache = [:]
+        // cache = [:]
       }
    }
 
@@ -80,7 +80,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       didSet {
          print("xela: TABLE SET\n")
          isRequestedPagination = false
-         cache = [:]
+//         cache = [:]
       }
    }
 
@@ -363,6 +363,11 @@ public extension TableItemsModel {
       isRequestedPagination = false
       isPaginationDisabled = false
 
+      return self
+   }
+    
+   @discardableResult func footerModel(_ value: UIViewModel) -> Self {
+      view.tableFooterView = value.uiView
       return self
    }
 }

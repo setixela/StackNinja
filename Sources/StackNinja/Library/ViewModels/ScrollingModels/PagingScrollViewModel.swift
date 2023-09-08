@@ -11,7 +11,7 @@ import UIKit
 public struct PagingScrollViewModelEvents: InitProtocol {
    public init() {}
 
-   public var didViewModelPresented: UIViewModel?
+   public var didViewModelPresented: (UIViewModel, index: Int)?
    public var didPop: Bool?
 }
 
@@ -67,7 +67,7 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
          send(\.didPop, currentPage == 0)
       }
       pageControl.currentPage = currentPage
-      send(\.didViewModelPresented, models[currentPage])
+      send(\.didViewModelPresented, (models[currentPage], index: currentPage))
    }
 
    // func that scroll to image at index
@@ -141,7 +141,7 @@ extension PagingScrollViewModel: StateMachine {
 
          prefFrame = view.frame
 
-         send(\.didViewModelPresented, models[pageControl.currentPage])
+         send(\.didViewModelPresented, (models[pageControl.currentPage], index: pageControl.currentPage))
 
       case let .addViewModel(model):
          models.append(model)
@@ -156,7 +156,7 @@ extension PagingScrollViewModel: StateMachine {
          pageControl.numberOfPages = models.count
 
          if models.count == 1 {
-            send(\.didViewModelPresented, models[pageControl.currentPage])
+            send(\.didViewModelPresented, (models[pageControl.currentPage], index: pageControl.currentPage))
          }
 
       case .deleteLast:

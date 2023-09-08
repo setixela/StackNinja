@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import AlamofireImage
 
 public extension ViewSetterProtocol where View: PaddingImageView {
    @discardableResult func image(_ value: UIImage, color: UIColor? = nil) -> Self {
