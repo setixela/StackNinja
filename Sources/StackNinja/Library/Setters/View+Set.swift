@@ -180,10 +180,10 @@ public extension ViewSetterProtocol {
       return self
    }
    
-   @discardableResult func addModel(_ value: UIViewModel, setup: (Anchors, UIView) -> Void) -> Self {
+   @discardableResult func addModel(_ value: UIViewModel, setup: ((Anchors, UIView) -> Void)? = nil) -> Self {
       let subview = value.uiView
       view.addSubview(subview)
-      setup(subview.addAnchors, view)
+      setup?(subview.addAnchors, view)
       return self
    }
    

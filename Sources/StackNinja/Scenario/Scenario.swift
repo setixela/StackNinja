@@ -12,15 +12,34 @@ public protocol Scenarible: AnyObject {
    var scenario: Scenery { get }
 }
 
+public extension Scenarible {
+   func scenarioStart() {
+      scenario.configureAndStart()
+   }
+}
+
 public protocol Scenarible2: Scenarible {
    associatedtype Scenery2: Scenario
    var scenario2: Scenery2 { get }
+}
+
+public extension Scenarible2 {
+   func scenario2Start() {
+      scenario2.configureAndStart()
+   }
 }
 
 public protocol Scenarible3: Scenarible2 {
    associatedtype Scenery3: Scenario
    var scenario3: Scenery3 { get }
 }
+
+public extension Scenarible3 {
+   func scenario3Start() {
+      scenario3.configureAndStart()
+   }
+}
+
 
 // MARK: - Scenario protocol and base scenario
 

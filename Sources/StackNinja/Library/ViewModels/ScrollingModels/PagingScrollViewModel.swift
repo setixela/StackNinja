@@ -58,11 +58,13 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
    }
 
    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-      let currentPage = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
+      guard scrollView.frame.size.width != 0 else  {return }
 
+      let currentPage = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
       guard currentPage < models.count else { 
          return
       }
+
       if currentPage == models.count - 2 || currentPage < pageControl.currentPage {
          send(\.didPop, currentPage == 0)
       }
