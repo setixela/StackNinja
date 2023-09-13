@@ -64,7 +64,11 @@ open class BaseParamsScenario<Params: ScenarioParams>: BaseWorkableScenario<
    Params.ScenarioWorks
 > {}
 
-open class BaseScenarioClass<State>: Scenario {
+public protocol StateableScenario: Scenario {
+    associatedtype State
+}
+
+open class BaseScenarioClass<State>: StateableScenario {
    public private(set) lazy var start = Work<Void, Void>()
 
    public private(set) var isConfigured: Bool = false

@@ -24,9 +24,9 @@ public final class PaginationSystem {
 
    public var isReady: Bool { !isFinished && !isPaginationInProgress }
 
-   private var isPaginationInProgress = false
-   private var isFinished = false
-   private var currentOffset = 0
+   private(set) var isPaginationInProgress = false
+   private(set) var isFinished = false
+   public private(set) var currentOffset = 0
 
    private let startOffset: Int
    private let pageSize: Int

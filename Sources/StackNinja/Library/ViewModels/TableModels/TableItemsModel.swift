@@ -65,7 +65,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       didSet {
          print("xela: TABLE SET\n")
          isRequestedPagination = false
-        // cache = [:]
+         cache = [:]
       }
    }
 
@@ -80,7 +80,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       didSet {
          print("xela: TABLE SET\n")
          isRequestedPagination = false
-//         cache = [:]
+         cache = [:]
       }
    }
 
