@@ -28,6 +28,7 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
    private var pageControl: UIPageControl { pageControlModel.view }
 
    private lazy var prefFrame = view.frame
+   private var prevPage = -1
 
    public override func start() {
       pagingEnabled(true)
@@ -82,7 +83,7 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
       
       let realPage = currentPage + increment
    
-      guard realPage != pageControl.currentPage else {
+      guard realPage != prevPage else {
          return
       }
       
@@ -91,17 +92,19 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
       }
       pageControl.currentPage = realPage
       send(\.didViewModelPresented, (models[realPage], index: realPage))
+      
+      prevPage = realPage
    }
 
    // func that scroll to image at index
    @discardableResult
-   public func scrollToIndex(_ index: Int) -> Self {
+   public func scrollToIndex(_ index: Int, animationDuration: CGFloat = 0.3) -> Self {
       guard index < models.count else { return self }
       
       let visibleIndex = visibleIndex(index: index)
       
       let xPosition = view.frame.width * CGFloat(visibleIndex)
-      UIView.animate(withDuration: 0.3) {
+      UIView.animate(withDuration: animationDuration) {
          self.view.setContentOffset(CGPoint(x: xPosition, y: 0), animated: false)
       } completion: { _ in
          self.scrollViewDidEndDecelerating(self.view)
@@ -113,25 +116,26 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
    }
 
    @discardableResult
-   public func scrollToEnd() -> Self {
+   public func scrollToEnd(animationDuration: CGFloat = 0.3) -> Self {
       guard models.count > 1 else { return self }
       
-      scrollToIndex(models.count - 1)
+      scrollToIndex(models.count - 1, animationDuration: animationDuration)
 
       return self
    }
 
    @discardableResult
-   public func pop() -> Self {
+   public func pop(animationDuration: CGFloat = 0.3) -> Self {
       guard models.count > 1 else { return self }
 
-      scrollToIndex(currentPage - 1)
+      scrollToIndex(currentPage - 1, animationDuration: animationDuration)
    
       return self
    }
    
    public func reload() {
-      view.layoutIfNeeded()
+      prefFrame = .zero
+      view.setNeedsLayout()
    }
    
    private func visibleIndex(index: Int) -> Int {
