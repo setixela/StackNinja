@@ -12,3 +12,9 @@ public protocol UIViewModel: ModelProtocol {
    var uiView: UIView { get }
    var isAutoreleaseView: Bool { get set }
 }
+
+public extension UIViewModel {
+    var uiViewModel: UIViewModel {
+        self
+    }
+}

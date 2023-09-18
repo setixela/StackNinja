@@ -19,6 +19,7 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
    public typealias Events = PagingScrollViewModelEvents
 
    public private(set) lazy var models = [UIViewModel]()
+   private var visibleModels: [UIViewModel] { models.filter { !$0.uiView.isHidden } }
 
    public var events = EventsStore()
    public var currentPage: Int { pageControl.currentPage }
@@ -41,11 +42,12 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
             self.prefFrame != self.view.frame
          else { return }
 
+         let notHiddenModels = self.models.filter { !$0.uiView.isHidden }
          let frameWidth = self.view.frame.width
          let frameHeight = self.view.frame.height
-         self.view.contentSize.width = self.view.frame.width * CGFloat(self.models.count)
+         self.view.contentSize.width = self.view.frame.width * CGFloat(notHiddenModels.count)
 
-         self.models.enumerated().forEach {
+         notHiddenModels.enumerated().forEach {
             let subview = $1.uiView
             let xPosition = frameWidth * CGFloat($0)
             subview.frame = CGRect(x: xPosition, y: 0,
@@ -61,23 +63,44 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
       guard scrollView.frame.size.width != 0 else  {return }
 
       let currentPage = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
-      guard currentPage < models.count else { 
+      let visibleModels = visibleModels
+      
+      guard currentPage < visibleModels.count else {
          return
       }
-
-      if currentPage == models.count - 2 || currentPage < pageControl.currentPage {
+      
+      var currentIndex = 0
+      var increment = 0
+      while currentIndex < models.count && currentIndex < (currentPage + increment + 1) {
+         let model = models[currentIndex]
+         let isHidden = model.uiView.isHidden
+         if isHidden {
+            increment += 1
+         }
+         currentIndex += 1
+      }
+      
+      let realPage = currentPage + increment
+   
+      guard realPage != pageControl.currentPage else {
+         return
+      }
+      
+      if realPage == models.count - 2 || realPage < pageControl.currentPage {
          send(\.didPop, currentPage == 0)
       }
-      pageControl.currentPage = currentPage
-      send(\.didViewModelPresented, (models[currentPage], index: currentPage))
+      pageControl.currentPage = realPage
+      send(\.didViewModelPresented, (models[realPage], index: realPage))
    }
 
    // func that scroll to image at index
    @discardableResult
    public func scrollToIndex(_ index: Int) -> Self {
       guard index < models.count else { return self }
-
-      let xPosition = view.frame.width * CGFloat(index)
+      
+      let visibleIndex = visibleIndex(index: index)
+      
+      let xPosition = view.frame.width * CGFloat(visibleIndex)
       UIView.animate(withDuration: 0.3) {
          self.view.setContentOffset(CGPoint(x: xPosition, y: 0), animated: false)
       } completion: { _ in
@@ -105,6 +128,20 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
       scrollToIndex(currentPage - 1)
    
       return self
+   }
+   
+   public func reload() {
+      view.layoutIfNeeded()
+   }
+   
+   private func visibleIndex(index: Int) -> Int {
+      var visibleIndex = 0
+      for i in 0 ..< index {
+         if models[i].uiView.isHidden == false {
+            visibleIndex += 1
+         }
+      }
+      return visibleIndex
    }
 }
 
