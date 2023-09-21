@@ -210,6 +210,18 @@ public extension BaseScrollStacked {
       view.isScrollEnabled = true
       return self
    }
+    
+   @discardableResult
+   func alwaysBounceVertical(_ value: Bool) -> Self {
+      view.alwaysBounceVertical = value
+      return self
+   }
+   
+   @discardableResult
+   func alwaysBounceHorizontal(_ value: Bool) -> Self {
+      view.alwaysBounceHorizontal = value
+      return self
+   }
 }
 
 public extension BaseScrollStacked {
