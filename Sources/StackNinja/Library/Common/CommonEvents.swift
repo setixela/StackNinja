@@ -31,7 +31,6 @@ public struct ViewEvents: ViewEventsProtocol {
 public typealias ButtonEvents = ViewEvents
 
 public protocol ScrollEventsProtocol: InitProtocol {
-   // TODO: - Обьединять ивенты как Стейты
    var didScroll: (velocity: CGFloat, offset: CGFloat)? { get set }
    var willEndDragging: (velocity: CGFloat, offset: CGFloat)? { get set }
 }

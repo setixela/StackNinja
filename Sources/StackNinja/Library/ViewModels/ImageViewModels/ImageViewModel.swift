@@ -14,7 +14,7 @@ public enum TapGestureState {
 
 open class ImageViewModel: BaseViewModel<PaddingImageView>, Eventable {
    public typealias Events = ButtonEvents
-   public var events = [Int: LambdaProtocol?]()
+   public var events = EventsStore()
 
    override open func start() {
       contentMode(.scaleAspectFit)

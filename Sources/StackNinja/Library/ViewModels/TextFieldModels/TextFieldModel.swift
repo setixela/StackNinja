@@ -32,7 +32,7 @@ open class TextFieldModel: BaseViewModel<PaddingTextField>,
 {
    public typealias Events = TextFieldEvents
 
-   public var events = [Int: LambdaProtocol?]()
+   public var events = EventsStore()
 
    override open func start() {
       set(.clearButtonMode(.whileEditing))

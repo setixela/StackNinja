@@ -11,7 +11,7 @@ import UIKit
 
 open class LabelModel: BaseViewModel<PaddingLabel>, Eventable {
    public typealias Events = ButtonEvents
-   public var events = [Int: LambdaProtocol?]()
+   public var events = EventsStore()
 
    @discardableResult
    public func makeTappable() -> Self {

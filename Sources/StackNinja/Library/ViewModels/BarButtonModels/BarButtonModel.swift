@@ -18,7 +18,7 @@ public struct BarButtonEvent: InitProtocol {
 
 public final class BarButtonModel: BaseModel, Eventable {
    public typealias Events = BarButtonEvent
-   public var events = [Int: LambdaProtocol?]()
+   public var events = EventsStore()
 
    override public func start() {
       on(\.initWithImage) { [weak self] image in

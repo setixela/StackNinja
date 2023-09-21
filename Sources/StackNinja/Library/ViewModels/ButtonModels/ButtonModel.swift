@@ -21,7 +21,7 @@ open class ButtonModel: BaseViewModel<ButtonExtended>, ButtonModelProtocol {
 
    public typealias Events = ButtonEvents
 
-   public var events = [Int: LambdaProtocol?]()
+   public var events = EventsStore()
 
    override open func start() {
       view.addTarget(self, action: #selector(didTap), for: .touchUpInside)
