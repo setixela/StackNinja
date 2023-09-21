@@ -71,7 +71,9 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
 
    private var itemSections: [TableItemsSection] = [] {
       willSet {
-         if itemSections.count == newValue.count {
+         let itemSectionsSum = itemSections.map({$0.items.count}).reduce(0, +)
+         let newValueSum = newValue.map({$0.items.count}).reduce(0, +)
+         if itemSectionsSum == newValueSum {
             isPaginationDisabled = true
          } else {
             isPaginationDisabled = false
