@@ -38,9 +38,9 @@ public extension ViewSetterProtocol where View: PaddingImageView {
       return self
    }
    
-   @discardableResult func textImage(_ value: String, _ backColor: UIColor) -> Self {
+    @discardableResult func textImage(_ value: String, backColor: UIColor, textColor: UIColor = .white) -> Self {
       DispatchQueue.global(qos: .background).async { [weak self] in
-         let image = value.drawImage(backColor: backColor)
+         let image = value.drawImage(backColor: backColor, textColor: textColor)
          DispatchQueue.main.async {
             self?.view.image = image
             self?.view.backgroundColor = backColor
@@ -136,10 +136,10 @@ public extension ViewSetterProtocol where View: PaddingImageView {
 }
 
 public extension String {
-   func drawImage(backColor: UIColor) -> UIImage {
+    func drawImage(backColor: UIColor, textColor: UIColor = .white) -> UIImage {
       let text = self
       let attributes = [
-         NSAttributedString.Key.foregroundColor: UIColor.white,
+         NSAttributedString.Key.foregroundColor: textColor,
          NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16),
          NSAttributedString.Key.backgroundColor: backColor
       ]
