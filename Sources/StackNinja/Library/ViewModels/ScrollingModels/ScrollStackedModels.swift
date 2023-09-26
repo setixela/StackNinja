@@ -56,7 +56,7 @@ open class ScrollStackedModelY: BaseScrollStacked, UIScrollViewDelegate {
          .leading(view.leadingAnchor)
          .trailing(view.trailingAnchor)
          .bottom(view.bottomAnchor)
-         .width(view.widthAnchor)
+         .centerX(view.centerXAnchor)
    }
 
    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -98,7 +98,7 @@ open class ScrollStackedModelX: BaseScrollStacked, UIScrollViewDelegate {
          .top(view.topAnchor)
          .leading(view.leadingAnchor)
          .trailing(view.trailingAnchor)
-         .height(view.heightAnchor)
+         .centerY(view.centerYAnchor)
    }
 
    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
