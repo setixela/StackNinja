@@ -8,16 +8,24 @@
 import ReactiveWorks
 import UIKit
 
-protocol CellModifierProtocol {}
+public protocol CellModifierProtocol {}
 
-protocol DisableSelectModifier: CellModifierProtocol {}
+public protocol DisableSelectModifier: CellModifierProtocol {}
+
+public protocol SectionProtocol {
+   associatedtype Item
+   var items: [Item] { get set }
+}
 
 public class TableItemsSection {
-   public let title: String
+   public let title: String?
    public var items: [Any] = []
+   public var isCollapsed: Bool = false
 
-   public init(title: String) {
+   public init(title: String? = nil, items: [Any] = [], isCollapsed: Bool = false) {
       self.title = title
+      self.items = items
+      self.isCollapsed = isCollapsed
    }
 }
 
@@ -63,7 +71,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
          }
       }
       didSet {
-         print("xela: TABLE SET\n")
+         print("TABLE SET\n")
          isRequestedPagination = false
          cache = [:]
       }
@@ -71,8 +79,8 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
 
    private var itemSections: [TableItemsSection] = [] {
       willSet {
-         let itemSectionsSum = itemSections.map({$0.items.count}).reduce(0, +)
-         let newValueSum = newValue.map({$0.items.count}).reduce(0, +)
+         let itemSectionsSum = itemSections.map(\.items.count).reduce(0, +)
+         let newValueSum = newValue.map(\.items.count).reduce(0, +)
          if itemSectionsSum == newValueSum {
             isPaginationDisabled = true
          } else {
@@ -80,7 +88,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
          }
       }
       didSet {
-         print("xela: TABLE SET\n")
+         print("TABLE SET\n")
          isRequestedPagination = false
          cache = [:]
       }
@@ -133,7 +141,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
          guard !(items[itemIndex] is (DisableSelectModifier)) else {
             return
          }
-          send(\.didSelectItem, items[itemIndex])
+         send(\.didSelectItem, items[itemIndex])
       } else {
          guard !(itemSections[indexPath.section].items[indexPath.row] is (DisableSelectModifier)) else {
             return
@@ -167,6 +175,15 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
 
       let cell = tableView.dequeueReusableCell(withIdentifier: cellName) ?? TableCell()
 
+      if isMultiSection {
+         let section = itemSections[indexPath.section]
+         if section.isCollapsed {
+            cell.isHidden = true
+         } else {
+            cell.isHidden = false
+         }
+      }
+
       let key = String("\(indexPath.section) \(indexPath.row)")
       var modelView: UIView? = cache[key]
 
@@ -189,32 +206,71 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       return cell
    }
 
-   public func tableView(_: UITableView, heightForRowAt _: IndexPath) -> CGFloat {
-      UITableView.automaticDimension
+   public func tableView(_: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+      if isMultiSection {
+         let section = itemSections[indexPath.section]
+         if section.isCollapsed {
+            return 0
+         } else {
+            return UITableView.automaticDimension
+         }
+      } else {
+         return UITableView.automaticDimension
+      }
    }
 
    public func tableView(_: UITableView, estimatedHeightForRowAt _: IndexPath) -> CGFloat {
       UITableView.automaticDimension
    }
 
+   private var viewForHeaderRequest: ((Int, TableItemsSection) -> UIViewModel)?
+
+   @discardableResult
+   public func headerModelFactory(_ factory: @escaping (Int, TableItemsSection) -> UIViewModel) -> Self {
+      viewForHeaderRequest = factory
+      return self
+   }
+   
+   @discardableResult
+   public func setSectionCollapsed(_ isCollapsed: Bool, at index: Int) -> Self {
+      if isMultiSection {
+         itemSections[safe: index]?.isCollapsed = isCollapsed
+      }
+      reload()
+      return self
+   }
+   
+   @discardableResult
+   public func toggleSectionCollapsed(at index: Int) -> Self {
+      if isMultiSection, let section = itemSections[safe: index] {
+         itemSections[safe: index]?.isCollapsed = !section.isCollapsed
+      }
+      reload()
+      return self
+   }
+
    public func tableView(_: UITableView, viewForHeaderInSection section: Int) -> UIView? {
       guard isMultiSection else { return nil }
 
-      let text = itemSections[section].title
-      let view = LabelModel()
-         .padding(.init(top: 4, left: 16, bottom: 4, right: 16))
-         .set(headerState)
-         .text(text)
-         .backColor(headerBackColor)
-         .uiView
+      if let viewForHeaderRequest {
+         return viewForHeaderRequest(section, itemSections[section]).uiView
+      } else {
+         let text = itemSections[section].title ?? ""
+         let view = LabelModel()
+            .padding(.init(top: 4, left: 16, bottom: 4, right: 16))
+            .set(headerState)
+            .text(text)
+            .backColor(headerBackColor)
+            .uiView
 
-      return view
+         return view
+      }
    }
 
    public func tableView(_: UITableView, heightForHeaderInSection _: Int) -> CGFloat {
       guard isMultiSection else { return 0 }
 
-      return 36
+      return UITableView.automaticDimension // 36
    }
 
    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -226,7 +282,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
 
       let pos = scrollView.contentOffset.y
       if pos > view.contentSize.height - scrollView.frame.size.height * 2 {
-         print("XELA: TABLE REQUEST PAGING")
+         print("TABLE REQUEST PAGING")
 
          send(\.requestPagination)
          isRequestedPagination = true
@@ -300,14 +356,14 @@ public extension TableItemsModel {
       return self
    }
 
-    @discardableResult func presenters(_ value: [PresenterProtocol]) -> Self {
-        presenters.removeAll()
-        value.forEach {
-            let key = $0.cellType
-            self.presenters[key] = $0
-        }
-        return self
-    }
+   @discardableResult func presenters(_ value: [PresenterProtocol]) -> Self {
+      presenters.removeAll()
+      value.forEach {
+         let key = $0.cellType
+         self.presenters[key] = $0
+      }
+      return self
+   }
 
    @discardableResult func updateItemAtIndex(_ value: Any,
                                              index: Int,
@@ -367,7 +423,7 @@ public extension TableItemsModel {
 
       return self
    }
-    
+
    @discardableResult func footerModel(_ value: UIViewModel) -> Self {
       view.tableFooterView = value.uiView
       return self

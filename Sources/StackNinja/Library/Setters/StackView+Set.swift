@@ -136,9 +136,9 @@ public extension ViewSetterProtocol where View: StackViewExtended {
       return self
    }
    
-    @discardableResult func disableBottomRadius(_ value: CGFloat, isOnTop: Bool = false) -> Self {
+    @discardableResult func disableBottomRadius(_ value: CGFloat, matteColor: UIColor? = nil, isOnTop: Bool = false) -> Self {
       let backView = UIView()
-      backView.backgroundColor = view.backgroundColor
+      backView.backgroundColor = matteColor ?? view.backgroundColor
         if isOnTop {
             view.addSubview(backView)
         } else {
