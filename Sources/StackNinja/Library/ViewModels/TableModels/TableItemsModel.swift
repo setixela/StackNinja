@@ -239,13 +239,27 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       reload()
       return self
    }
-   
+
    @discardableResult
-   public func toggleSectionCollapsed(at index: Int) -> Self {
+   public func toggleSectionCollapsed(at index: Int, animated: Bool = true) -> Self {
       if isMultiSection, let section = itemSections[safe: index] {
          itemSections[safe: index]?.isCollapsed = !section.isCollapsed
       }
-      reload()
+      if animated {
+         let sectionToReload = index
+         let rowsInSection = view.numberOfRows(inSection: sectionToReload)
+         var indexPathsToReload: [IndexPath] = []
+
+         for row in 0 ..< rowsInSection {
+            indexPathsToReload.append(IndexPath(row: row, section: sectionToReload))
+         }
+
+         view.reloadRows(at: indexPathsToReload, with: .automatic)
+      } else {
+         reload()
+      }
+      view.reloadSections(IndexSet(integer: index), with: .fade)
+      
       return self
    }
 
