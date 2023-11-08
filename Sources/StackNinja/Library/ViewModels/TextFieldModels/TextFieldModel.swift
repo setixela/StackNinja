@@ -16,6 +16,7 @@ public struct TextFieldEvents: InitProtocol {
    public var didTap: String?
    public var didBeginEditing: String?
    public var didEndEditing: String?
+   public var textFieldShouldClear: Void?
 }
 
 
@@ -68,6 +69,11 @@ open class TextFieldModel: BaseViewModel<PaddingTextField>,
       let allowedCharacters = CharacterSet.decimalDigits
       let characterSet = CharacterSet(charactersIn: string)
       return allowedCharacters.isSuperset(of: characterSet)
+   }
+   
+   public func textFieldShouldClear(_ textField: UITextField) -> Bool {
+      send(\.textFieldShouldClear)
+      return true
    }
 }
 
