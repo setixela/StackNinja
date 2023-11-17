@@ -33,6 +33,7 @@ public struct TableItemsEvents: ScrollEventsProtocol {
    public init() {}
 
    public var didSelectRow: (IndexPath, Int)?
+   public var deleteItemAtIndex: Int?
    public var didSelectItemAtIndex: Int?
    public var didSelectItem: Any?
    public var willDisplayCellAtIndexPath: (UITableViewCell, IndexPath)?
@@ -94,6 +95,8 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       }
    }
 
+   private var deleteModeOn: Bool = false
+   
    private var prevScrollOffset: CGFloat = 0
 
    private var isRequestedPagination = false
@@ -134,6 +137,29 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
    }
 
    // MARK: -  UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate
+   
+   public func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
+      -> UISwipeActionsConfiguration?
+   {
+      let itemIndex = indexPath.row
+      let deleteAction = UIContextualAction(style: .destructive, title: nil) { _, _, completionHandler in
+         self.items.remove(at: indexPath.row)
+         tableView.deleteRows(at: [indexPath], with: .fade)
+         self.send(\.deleteItemAtIndex, itemIndex)
+         completionHandler(true)
+      }
+      deleteAction.image = UIImage(systemName: "trash")
+      deleteAction.backgroundColor = .systemRed
+      let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+      return configuration
+   }
+
+   public func tableView(_: UITableView, canEditRowAt _: IndexPath) -> Bool {
+      if deleteModeOn {
+         return true
+      }
+      return false
+   }
 
    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       var itemIndex = indexPath.row
@@ -440,6 +466,11 @@ public extension TableItemsModel {
 
    @discardableResult func footerModel(_ value: UIViewModel) -> Self {
       view.tableFooterView = value.uiView
+      return self
+   }
+   
+   @discardableResult func deleteModeOn(_ value: Bool) -> Self {
+      deleteModeOn = value
       return self
    }
 }
