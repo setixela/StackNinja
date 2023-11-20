@@ -96,6 +96,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
    }
 
    private var deleteModeOn: Bool = false
+   private var deletableValues: [Bool] = []
    
    private var prevScrollOffset: CGFloat = 0
 
@@ -154,8 +155,8 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
       return configuration
    }
 
-   public func tableView(_: UITableView, canEditRowAt _: IndexPath) -> Bool {
-      if deleteModeOn {
+   public func tableView(_: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+      if deleteModeOn, deletableValues.indices.contains(indexPath.row), deletableValues[indexPath.row] {
          return true
       }
       return false
@@ -377,6 +378,11 @@ public extension TableItemsModel {
    @discardableResult func items(_ value: [Any]) -> Self {
       items = value
       view.reloadData()
+      return self
+   }
+   
+   @discardableResult func deletableValues(_ value: [Bool]) -> Self {
+      deletableValues = value
       return self
    }
 
