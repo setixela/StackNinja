@@ -34,7 +34,8 @@ public final class PagingScrollViewModel: ScrollViewModel, Eventable {
       pagingEnabled(true)
       safeAreaOffsetDisabled()
       view.delegate = self
-     // view.canCancelContentTouches = false
+      view.delaysContentTouches = false
+      view.canCancelContentTouches = false
 
       view.on(\.didLayout) { [weak self] in
          guard
