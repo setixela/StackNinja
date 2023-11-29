@@ -23,7 +23,6 @@ public final class DefaultVCModel: BaseVCModel {
 
    override public func viewDidLoad() {
       super.viewDidLoad()
-      view.backgroundColor = .white
       navigationController?.navigationBar.backgroundColor = .clear
 
       clearBackButton()
