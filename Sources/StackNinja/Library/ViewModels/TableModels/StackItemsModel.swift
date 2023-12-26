@@ -18,14 +18,14 @@ public enum StackItemsState {
 
 public struct StackItemsEvents: InitProtocol {
    public init() {}
-   public  var didSelectRow: Int?
+   public var didSelectRow: Int?
 }
 
 public final class StackItemsModel: StackModel, Presenting, Eventable, Stateable3 {
-   public  var presenters: [String: PresenterProtocol] = [:]
+   public var presenters: [String: PresenterProtocol] = [:]
 
-   public  typealias Events = StackItemsEvents
-   public  var events = EventsStore()
+   public typealias Events = StackItemsEvents
+   public var events = EventsStore()
 
    private var isSelectEnabled = false
 
@@ -35,10 +35,10 @@ public final class StackItemsModel: StackModel, Presenting, Eventable, Stateable
 public extension StackItemsModel {
    func applyState(_ state: StackItemsState) {
       switch state {
-      case .items(let items):
+      case let .items(items):
          self.items = items
          arrangedModels(items.enumerated().map {
-            let model = makeModelForData($0.1)
+            let model = makeModelForData($0.1, index: $0.0)
             if isSelectEnabled {
                let rec = UITapGestureRecognizer(target: self, action: #selector(didTap(_:)))
                rec.name = String($0.0)
@@ -46,7 +46,7 @@ public extension StackItemsModel {
             }
             return model
          })
-      case .presenters(let presenters):
+      case let .presenters(presenters):
          self.presenters.removeAll()
          presenters.forEach {
             let key = $0.cellType
@@ -54,7 +54,7 @@ public extension StackItemsModel {
          }
       case .activateSelector:
          isSelectEnabled = true
-      case .removeAllExceptIndex(let index):
+      case let .removeAllExceptIndex(index):
          view.arrangedSubviews.enumerated().forEach {
             guard $0.offset != index else { return }
             $0.element.removeFromSuperview()
@@ -68,12 +68,12 @@ public extension StackItemsModel {
       }
    }
 
-   private func makeModelForData(_ item: Any) -> UIViewModel {
+   private func makeModelForData(_ item: Any, index: Int) -> UIViewModel {
       let cellName = String(describing: type(of: item))
 
       guard let presenter = presenters[cellName] else { return ViewModel() }
 
-      let model = presenter.viewModel(for: item, index: 0)
+      let model = presenter.viewModel(for: item, indexPath: .init(row: index, section: 0))
       return model
    }
 

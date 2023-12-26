@@ -6,16 +6,17 @@
 //
 
 import ReactiveWorks
+import Foundation
 
 public protocol PresenterProtocol {
    var cellType: String { get }
 
-   func viewModel(for item: Any, index: Int) -> UIViewModel
+   func viewModel(for item: Any, indexPath: IndexPath) -> UIViewModel
 }
 
-open class CellPresenterWork<In, Out: UIViewModel>: Work<(item: In, index: Int), Out>, PresenterProtocol {
-   public func viewModel(for item: Any, index: Int) -> UIViewModel {
-      doSync((item: item, index: index) as? (In, Int)) ?? { fatalError("Maybe, forgot to call: work.success(cell)") }()
+open class CellPresenterWork<In, Out: UIViewModel>: Work<(item: In, indexPath: IndexPath), Out>, PresenterProtocol {
+   public func viewModel(for item: Any, indexPath: IndexPath) -> UIViewModel {
+      doSync((item: item, indexPath: indexPath) as? (In, IndexPath)) ?? { fatalError("Maybe, forgot to call: work.success(cell)") }()
    }
 
    public var cellType: String {

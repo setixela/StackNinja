@@ -216,7 +216,7 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
 
       if modelView == nil {
          let presenter = presenters[cellName]
-         let model = presenter?.viewModel(for: item, index: indexPath.row)
+         let model = presenter?.viewModel(for: item, indexPath: indexPath)
          modelView = model?.uiView
 
          cache[key] = modelView
