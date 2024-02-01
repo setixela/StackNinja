@@ -5,8 +5,6 @@
 //  Created by Aleksandr Solovyev on 04.02.2023.
 //
 
-import ReactiveWorks
-
 public protocol HeaderBodyFooterStackProtocol {
    var headerStack: StackModel { get }
    var bodyStack: StackModel { get }
@@ -14,15 +12,21 @@ public protocol HeaderBodyFooterStackProtocol {
 }
 
 open class HeaderBodyFooterStackModel: BaseViewModel<StackViewExtended>, HeaderBodyFooterStackProtocol {
-   public let headerStack = StackModel(.axis(.vertical),
-                                       .alignment(.fill),
-                                       .distribution(.fill))
-   public let bodyStack = StackModel(.axis(.vertical),
-                                     .alignment(.fill),
-                                     .distribution(.fill))
-   public let footerStack = StackModel(.axis(.vertical),
-                                       .alignment(.fill),
-                                       .distribution(.fill))
+   public let headerStack = StackModel(
+      .axis(.vertical),
+      .alignment(.fill),
+      .distribution(.fill)
+   )
+   public let bodyStack = StackModel(
+      .axis(.vertical),
+      .alignment(.fill),
+      .distribution(.fill)
+   )
+   public let footerStack = StackModel(
+      .axis(.vertical),
+      .alignment(.fill),
+      .distribution(.fill)
+   )
 
    override open func start() {
       axis(.vertical)
@@ -31,7 +35,7 @@ open class HeaderBodyFooterStackModel: BaseViewModel<StackViewExtended>, HeaderB
       arrangedModels([
          headerStack,
          bodyStack,
-         footerStack,
+         footerStack
       ])
    }
 }

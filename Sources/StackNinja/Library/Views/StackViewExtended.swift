@@ -16,7 +16,8 @@ public final class StackViewExtended: UIStackView, Eventable, ViewModelStorageVi
    public var events: EventsStore = .init()
    
    weak var backView: UIView?
-   
+   weak var frontView: UIView?
+
    public var viewModel: UIViewModel?
    
    public var activityModel: UIViewModel?
@@ -53,11 +54,13 @@ public final class StackViewExtended: UIStackView, Eventable, ViewModelStorageVi
 
       send(\.didLayout)
       
-      guard let backView = backView else {
-         return
+      if let backView {
+         sendSubviewToBack(backView)
       }
-      
-      sendSubviewToBack(backView)
+
+      if let frontView {
+         bringSubviewToFront(frontView)
+      }
    }
    
    public override func willMove(toSuperview newSuperview: UIView?) {

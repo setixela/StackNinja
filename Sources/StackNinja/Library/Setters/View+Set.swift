@@ -168,11 +168,15 @@ public extension ViewSetterProtocol {
       return self
    }
 
-   @discardableResult func addModel(_ value: UIViewModel, setup: ((Anchors, UIView) -> Void)? = nil) -> Self {
-      let subview = value.uiView
-      view.addSubview(subview)
-      setup?(subview.addAnchors, view)
-      return self
+    @discardableResult func addModel(
+        _ value: UIViewModel,
+        setup: ((Anchors, UIView) -> Void)? = { $0.fitToView($1) }
+    ) -> Self
+    {
+        let subview = value.uiView
+        view.addSubview(subview)
+        setup?(subview.addAnchors, view)
+        return self
    }
 
    @discardableResult func subviewModel(_ value: UIViewModel) -> Self {

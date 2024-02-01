@@ -29,6 +29,12 @@ open class StackModel: BaseViewModel<StackViewExtended> {
       arrangedModels(models)
    }
 
+    public convenience init(_ models: [UIViewModel]) {
+        self.init()
+
+        arrangedModels(models)
+    }
+
    override open func start() {
       axis(.vertical)
    }

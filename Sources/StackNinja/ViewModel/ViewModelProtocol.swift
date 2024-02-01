@@ -119,6 +119,13 @@ open class BaseViewModel<View: UIView>: NSObject, ViewModelProtocol {
       self.isAutoreleaseView = isAutoreleaseView
    }
 
+   public init(view: View) {
+      super.init()
+
+      autostartedView = view
+      weakView = view
+   }
+
    open func start() {}
 
    public func setupView(_ closure: GenericClosure<View>) {
