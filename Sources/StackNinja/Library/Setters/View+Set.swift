@@ -23,6 +23,11 @@ public extension ViewSetterProtocol {
       view.layer.cornerCurve = value
       return self
    }
+   
+   @discardableResult func maskedCorners(_ value: CACornerMask) -> Self {
+      view.layer.maskedCorners = value
+      return self
+   }
 
    @discardableResult func borderWidth(_ value: CGFloat) -> Self {
       view.layer.borderWidth = value
