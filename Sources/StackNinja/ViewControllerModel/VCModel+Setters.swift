@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Aleksandr Solovyev on 16.11.2022.
 //
@@ -10,7 +10,7 @@ import UIKit
 public extension VCModelProtocol {
    @discardableResult func clearBackButton() -> Self {
       navigationController?.navigationBar.topItem?.backBarButtonItem
-      = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+         = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
       return self
    }
@@ -87,8 +87,8 @@ public extension VCModelProtocol {
       return self
    }
 
-   @discardableResult func navBarHidden(_ value: Bool) -> Self {
-      navigationController?.navigationBar.isHidden = value
+   @discardableResult func navBarHidden(_ value: Bool, animated: Bool = true) -> Self {
+      navigationController?.setNavigationBarHidden(value, animated: animated)
       return self
    }
 

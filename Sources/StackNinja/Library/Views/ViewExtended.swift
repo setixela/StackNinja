@@ -15,7 +15,7 @@ import UIKit
 
 extension UIView: TappableView {
    @discardableResult
-   public func startTapGestureRecognize(cancelTouch: Bool = false) -> Self {
+    public func startTapGestureRecognize(cancelTouch: Bool = false) -> Self {
       let gesture = UITapGestureRecognizer(target: self, action: #selector(didTap))
       gesture.cancelsTouchesInView = cancelTouch
       addGestureRecognizer(gesture)
@@ -32,7 +32,7 @@ extension UIView: TappableView {
 
 extension UIView: ButtonTapAnimator {}
 
-public final class PaddingView: UIView, Marginable {
+open class PaddingView: UIView, Marginable {
    public var padding: UIEdgeInsets = .init()
 
    override public var alignmentRectInsets: UIEdgeInsets {
@@ -45,7 +45,7 @@ public final class PaddingView: UIView, Marginable {
 
 // MARK: - ViewExtended
 
-public final class ViewExtended: UIView, Tappable, LoadableView, ViewModelStorageView, Squircle {
+open class ViewExtended: UIView, Tappable, LoadableView, ViewModelStorageView, Squircle {
    public var viewModel: UIViewModel?
 
    public var events: EventsStore = .init()

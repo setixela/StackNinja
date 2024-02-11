@@ -9,7 +9,7 @@ import ReactiveWorks
 import UIKit
 
 public protocol SceneModelProtocol: ModelProtocol {
-   func makeVC() -> UIViewController
+   func makeVC(routeType: NavType) -> UIViewController
    func makeMainView() -> UIView
    func setInput(_ value: Any?)
    func dismiss(animated: Bool)
@@ -25,7 +25,7 @@ public protocol SceneOutputProtocol: AnyObject {
 }
 
 open class BaseScene<In, Out>: NSObject, SceneInputProtocol, SceneModelProtocol, SceneOutputProtocol {
-   open func makeVC() -> UIViewController {
+   open func makeVC(routeType: NavType) -> UIViewController {
       fatalError()
    }
 
@@ -84,6 +84,8 @@ open class BaseSceneModel<
 
    private var isDismissCalled = false
 
+   public private(set) var routeType: NavType?
+
    override open func start() {
       vcModel?.on(\.dismiss, self) {
          if !$0.isDismissCalled {
@@ -124,9 +126,11 @@ open class BaseSceneModel<
       print("DEINIT SceneModel")
    }
 
-   override public func makeVC() -> UIViewController {
+   public override func makeVC(routeType: NavType) -> UIViewController {
+      self.routeType = routeType
       let model = VCModel(sceneModel: self)
       vcModel = model
+      vcModel?.restorationIdentifier = routeType.rawValue
       return model
    }
 
