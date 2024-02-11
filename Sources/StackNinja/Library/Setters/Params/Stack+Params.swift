@@ -26,6 +26,7 @@ public enum StackState {
    case backImage(UIImage)
    case backViewModel(UIViewModel, inset: UIEdgeInsets = .zero)
    case shadow(Shadow)
+   case maskedCorners(CACornerMask)
 }
 
 public extension ViewModelProtocol where Self: Stateable, View: StackViewExtended {
@@ -68,6 +69,8 @@ public extension ViewModelProtocol where Self: Stateable, View: StackViewExtende
          backViewModel(value, inset: inset)
       case let .shadow(value):
          shadow(value)
+      case let .maskedCorners(value):
+         maskedCorners(value)
       }
    }
 }
