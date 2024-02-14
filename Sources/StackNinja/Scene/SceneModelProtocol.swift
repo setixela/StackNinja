@@ -100,7 +100,12 @@ open class BaseSceneModel<
 
    override public func dismiss(animated: Bool = true) {
       isDismissCalled = true
-      vcModel?.dismiss(animated: animated)
+      if let routeType, routeType == .push {
+         vcModel?.navigationController?.popViewController(animated: animated)
+      } else {
+
+         vcModel?.dismiss(animated: animated)
+      }
    }
 
    public func finishSucces(_ value: Output) {
