@@ -17,6 +17,7 @@ public struct TextFieldEvents: InitProtocol {
    public var didBeginEditing: String?
    public var didEndEditing: String?
    public var textFieldShouldClear: Void?
+   public var textFieldShouldReturn: String?
 }
 
 
@@ -73,6 +74,11 @@ open class TextFieldModel: BaseViewModel<PaddingTextField>,
    
    public func textFieldShouldClear(_ textField: UITextField) -> Bool {
       send(\.textFieldShouldClear)
+      return true
+   }
+   
+   public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+      send(\.textFieldShouldReturn, view.text.string)
       return true
    }
 }
