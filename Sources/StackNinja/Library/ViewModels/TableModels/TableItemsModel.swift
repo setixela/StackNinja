@@ -165,8 +165,8 @@ public final class TableItemsModel: BaseViewModel<TableViewExtended>,
    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       var itemIndex = indexPath.row
       if isMultiSection == false {
-         guard !(items[itemIndex] is (DisableSelectModifier)) else {
-            return
+         guard itemIndex >= 0 && itemIndex < items.count && !(items[itemIndex] is DisableSelectModifier) else {
+             return
          }
          send(\.didSelectItem, items[itemIndex])
       } else {
